@@ -1,0 +1,70 @@
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.bg-primary, .bg-success, .bg-info, .bg-warning {
+  color: white;
+}
+
+.bg-primary {
+  background-color: #007bff !important;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-info {
+  background-color: #17a2b8 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529;
+}
+
+.table th {
+  font-weight: 500;
+}
+
+.badge {
+  padding: 0.4em 0.6em;
+  font-size: 0.75em;
+  border-radius: 0.25rem;
+}
+
+.badge-pending {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-processing {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-shipped {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.badge-delivered {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-cancelled {
+  background-color: #dc3545;
+  color: white;
+}

@@ -1,0 +1,36 @@
+.img-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.badge {
+  padding: 0.4em 0.6em;
+  font-size: 0.75em;
+  border-radius: 0.25rem;
+}
+
+.badge-admin {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.badge-user {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-inactive {
+  background-color: #dc3545;
+  color: white;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+}

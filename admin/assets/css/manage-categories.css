@@ -1,0 +1,36 @@
+.img-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.badge-status {
+  padding: 0.4em 0.6em;
+  font-size: 0.75em;
+  border-radius: 0.25rem;
+}
+
+.badge-active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-inactive {
+  background-color: #dc3545;
+  color: white;
+}
+
+.image-preview {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+}

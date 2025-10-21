@@ -1,0 +1,52 @@
+.card {
+  margin-bottom: 20px;
+}
+
+.card-title {
+  margin-bottom: 0;
+}
+
+.bg-primary, .bg-success, .bg-info, .bg-warning {
+  color: white;
+}
+
+.card-text {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+/* Ẩn các phần tử khi in */
+@media print {
+  #header-container, #sidebar-container, #footer-container, .btn-toolbar, .card-header {
+    display: none !important;
+  }
+  
+  .main-content {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .card-body {
+    padding: 0 !important;
+  }
+  
+  .container-fluid {
+    padding: 0 !important;
+  }
+  
+  .row {
+    margin: 0 !important;
+  }
+  
+  .col-md-3, .col-md-6, .col-md-12 {
+    padding: 5px !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+}

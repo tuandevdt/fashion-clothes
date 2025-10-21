@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận đơn hàng - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .confirmation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .confirmation-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .confirmation-icon {
+            font-size: 5rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .order-details {
+            margin-top: 30px;
+        }
+        
+        .order-details-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .order-info-item {
+            margin-bottom: 10px;
+        }
+        
+        .order-info-label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .order-items {
+            margin-top: 20px;
+        }
+        
+        .order-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        
+        .order-item-details {
+            flex-grow: 1;
+        }
+        
+        .order-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .order-item-price {
+            color: var(--primary-color);
+        }
+        
+        .order-item-quantity {
+            margin-left: auto;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        
+        .order-summary {
+            margin-top: 30px;
+        }
+        
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .order-summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .order-summary-total-amount {
+            color: var(--primary-color);
+        }
+        
+        .confirmation-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div class="confirmation-container">
+            <div class="confirmation-header">
+                <div class="confirmation-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Đặt hàng thành công!</h1>
+                <p class="lead">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được tiếp nhận và đang được xử lý.</p>
+            </div>
+            
+            <div class="order-details">
+                <h3 class="order-details-title">Chi tiết đơn hàng</h3>
+                
+                <div class="order-info">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="order-info-item">
+                                <span class="order-info-label">Mã đơn hàng:</span>
+                                <span id="orderNumber">#TN123456</span>
+                            </div>
+                            <div class="order-info-item">
+                                <span class="order-info-label">Ngày đặt hàng:</span>
+                                <span id="orderDate">15/05/2023</span>
+                            </div>
+                            <div class="order-info-item">
+                                <span class="order-info-label">Phương thức thanh toán:</span>
+                                <span id="paymentMethod">Thanh toán khi nhận hàng (COD)</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="order-info-item">
+                                <span class="order-info-label">Tên khách hàng:</span>
+                                <span id="customerName">Nguyễn Văn A</span>
+                            </div>
+                            <div class="order-info-item">
+                                <span class="order-info-label">Email:</span>
+                                <span id="customerEmail">nguyenvana@example.com</span>
+                            </div>
+                            <div class="order-info-item">
+                                <span class="order-info-label">Số điện thoại:</span>
+                                <span id="customerPhone">0123456789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shipping-info">
+                    <h4>Địa chỉ giao hàng</h4>
+                    <p id="shippingAddress">Nguyễn Văn A<br>123 Đường ABC, Phường XYZ, Quận 1<br>TP. Hồ Chí Minh<br>Việt Nam</p>
+                </div>
+                
+                <div class="order-items">
+                    <h4>Sản phẩm đã đặt</h4>
+                    <div id="orderItemsContainer">
+                        <!-- Order items will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <div class="order-summary-item">
+                        <span>Tạm tính</span>
+                        <span id="subtotal">2.490.000₫</span>
+                    </div>
+                    <div class="order-summary-item">
+                        <span>Phí vận chuyển</span>
+                        <span id="shipping">30.000₫</span>
+                    </div>
+                    <div class="order-summary-total">
+                        <span>Tổng cộng</span>
+                        <span class="order-summary-total-amount" id="total">2.520.000₫</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="confirmation-footer">
+                <p>Một email xác nhận đã được gửi đến địa chỉ email của bạn.</p>
+                <div class="mt-4">
+                    <a href="index.html" class="btn btn-primary me-2">Tiếp tục mua sắm</a>
+                    <a href="../account/orders.html" class="btn btn-outline-primary">Xem đơn hàng của tôi</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load order details
+            loadOrderDetails();
+        });
+        
+        // Load order details
+        function loadOrderDetails() {
+            // In a real application, you would get the order ID from URL and call your API
+            // For now, we'll simulate an API call with mock data
+            setTimeout(() => {
+                // Mock order data
+                const orderData = {
+                    id: 'TN123456',
+                    date: '2023-05-15',
+                    paymentMethod: 'Thanh toán khi nhận hàng (COD)',
+                    customer: {
+                        name: 'Nguyễn Văn A',
+                        email: 'nguyenvana@example.com',
+                        phone: '0123456789',
+                        address: '123 Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh, Việt Nam'
+                    },
+                    items: [
+                        {
+                            id: 1,
+                            productId: 1,
+                            name: 'Túi xách thời trang cao cấp Tina',
+                            price: 1290000,
+                            salePrice: 990000,
+                            quantity: 1,
+                            imageUrl: 'assets/image/product1.jpg'
+                        },
+                        {
+                            id: 2,
+                            productId: 3,
+                            name: 'Túi đeo chéo mini phong cách Hàn Quốc',
+                            price: 750000,
+                            quantity: 2,
+                            imageUrl: 'assets/image/product3.jpg'
+                        }
+                    ],
+                    subtotal: 2490000,
+                    shipping: 30000,
+                    discount: 0,
+                    total: 2520000
+                };
+                
+                // Update order info
+                document.getElementById('orderNumber').textContent = '#' + orderData.id;
+                document.getElementById('orderDate').textContent = formatDate(orderData.date);
+                document.getElementById('paymentMethod').textContent = orderData.paymentMethod;
+                document.getElementById('customerName').textContent = orderData.customer.name;
+                document.getElementById('customerEmail').textContent = orderData.customer.email;
+                document.getElementById('customerPhone').textContent = orderData.customer.phone;
+                document.getElementById('shippingAddress').innerHTML = orderData.customer.name + '<br>' + orderData.customer.address;
+                
+                // Generate order items HTML
+                const orderItemsContainer = document.getElementById('orderItemsContainer');
+                orderItemsContainer.innerHTML = '';
+                
+                orderData.items.forEach(item => {
+                    const itemPrice = item.salePrice || item.price;
+                    const itemTotal = itemPrice * item.quantity;
+                    
+                    const orderItemElement = document.createElement('div');
+                    orderItemElement.className = 'order-item';
+                    orderItemElement.innerHTML = `
+                        <img src="${item.imageUrl}" alt="${item.name}" class="order-item-image">
+                        <div class="order-item-details">
+                            <h5 class="order-item-title">${item.name}</h5>
+                            <div class="order-item-price">${formatCurrency(itemPrice)} x ${item.quantity}</div>
+                        </div>
+                        <div class="order-item-total">${formatCurrency(itemTotal)}</div>
+                    `;
+                    
+                    orderItemsContainer.appendChild(orderItemElement);
+                });
+                
+                // Update summary amounts
+                document.getElementById('subtotal').textContent = formatCurrency(orderData.subtotal);
+                document.getElementById('shipping').textContent = formatCurrency(orderData.shipping);
+                document.getElementById('total').textContent = formatCurrency(orderData.total);
+            }, 500);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

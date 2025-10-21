@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản của tôi - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .account-sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .account-sidebar-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .account-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .account-menu-item {
+            margin-bottom: 10px;
+        }
+        
+        .account-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .account-menu-link:hover {
+            background-color: #e9ecef;
+        }
+        
+        .account-menu-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .account-menu-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .account-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .account-content-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .profile-info {
+            margin-bottom: 30px;
+        }
+        
+        .profile-info-item {
+            margin-bottom: 15px;
+        }
+        
+        .profile-info-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .profile-info-value {
+            color: #6c757d;
+        }
+        
+        .address-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .address-card-default {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .address-card-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .address-card-content {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        
+        .address-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <h1 class="mb-4">Tài khoản của tôi</h1>
+        
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tài khoản của tôi</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <!-- Account Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="account-sidebar">
+                    <h3 class="account-sidebar-title">Tài khoản</h3>
+                    <ul class="account-menu">
+                        <li class="account-menu-item">
+                            <a href="account.html" class="account-menu-link active">
+                                <span class="account-menu-icon"><i class="fas fa-user"></i></span>
+                                Thông tin tài khoản
+                            </a>
+                        </li>
+                        <li class="account-menu-item">
+                            <a href="order-history.html" class="account-menu-link">
+                                <span class="account-menu-icon"><i class="fas fa-shopping-bag"></i></span>
+                                Lịch sử đặt hàng
+                            </a>
+                        </li>
+
+                        <li class="account-menu-item">
+                            <a href="account-change-password.html" class="account-menu-link">
+                                <span class="account-menu-icon"><i class="fas fa-lock"></i></span>
+                                Đổi mật khẩu
+                            </a>
+                        </li>
+                        <li class="account-menu-item">
+                            <a href="#" class="account-menu-link" id="logout-link">
+                                <span class="account-menu-icon"><i class="fas fa-sign-out-alt"></i></span>
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Account Content -->
+            <div class="col-lg-9">
+                <div class="account-content">
+                    <h2 class="account-content-title">Thông tin tài khoản</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <img src="assets/image/default-image.avif" alt="Avatar" class="profile-avatar" id="user-avatar"
+                                 onerror="this.src='assets/image/user-avatar.jpg'">
+                            <div class="mt-3">
+                                <button class="btn btn-outline-primary btn-sm" id="change-avatar-btn">
+                                    <i class="fas fa-camera me-2"></i> Thay đổi ảnh đại diện
+                                </button>
+                                <input type="file" id="avatar-upload" class="d-none" accept="image/*">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-8">
+                            <div class="profile-info">
+                                <div class="profile-info-item">
+                                    <div class="profile-info-label">Họ và tên</div>
+                                    <div class="profile-info-value" id="user-name">Nguyễn Văn A</div>
+                                </div>
+                                <div class="profile-info-item">
+                                    <div class="profile-info-label">Email</div>
+                                    <div class="profile-info-value" id="user-email">nguyenvana@example.com</div>
+                                </div>
+                                <div class="profile-info-item">
+                                    <div class="profile-info-label">Số điện thoại</div>
+                                    <div class="profile-info-value" id="user-phone">0123456789</div>
+                                </div>
+                                <div class="profile-info-item">
+                                    <div class="profile-info-label">Địa chỉ</div>
+                                    <div class="profile-info-value" id="user-address">Chưa cập nhật</div>
+                                </div>
+                                <div class="profile-info-item">
+                                    <div class="profile-info-label">Giới tính</div>
+                                    <div class="profile-info-value" id="user-gender">Chưa cập nhật</div>
+                                </div>
+                                <div class="profile-info-item">
+                                    <div class="profile-info-label">Ngày tham gia</div>
+                                    <div class="profile-info-value" id="user-join-date">01/01/2023</div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="edit-profile-btn">
+                                <i class="fas fa-edit me-2"></i> Chỉnh sửa thông tin
+                            </button>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Chỉnh sửa thông tin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="editPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAddress" class="form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" id="editAddress">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGender" class="form-label">Giới tính</label>
+                            <select class="form-control" id="editGender">
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="saveProfileBtn">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    <script src="assets/data/mock-data-service.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            if (!isLoggedIn()) {
+                // Redirect to login page
+                Swal.fire({
+                    title: 'Yêu cầu đăng nhập',
+                    text: 'Vui lòng đăng nhập để xem thông tin tài khoản',
+                    icon: 'warning',
+                    confirmButtonText: 'Đăng nhập'
+                }).then(() => {
+                    window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+                });
+                return;
+            }
+
+            // Wait for MockDataService to be available
+            Promise.all([
+                loadMockDataService(),
+                loadHeaderAndFooter()
+            ]).then(() => {
+                loadUserProfile();
+            }).catch((error) => {
+                console.error('Error loading dependencies:', error);
+                // Still try to load user profile
+                loadUserProfile();
+            });
+            
+            // Handle edit profile button
+            document.getElementById('edit-profile-btn').addEventListener('click', function() {
+                // Populate form with current user data
+                const userName = document.getElementById('user-name').textContent;
+                const userEmail = document.getElementById('user-email').textContent;
+                const userPhone = document.getElementById('user-phone').textContent;
+                const userAddress = document.getElementById('user-address').textContent;
+                const userGender = document.getElementById('user-gender').textContent;
+
+                document.getElementById('editName').value = userName !== 'Chưa cập nhật' ? userName : '';
+                document.getElementById('editEmail').value = userEmail !== 'Chưa cập nhật' ? userEmail : '';
+                document.getElementById('editPhone').value = userPhone !== 'Chưa cập nhật' ? userPhone : '';
+                document.getElementById('editAddress').value = userAddress !== 'Chưa cập nhật' ? userAddress : '';
+                document.getElementById('editGender').value = userGender !== 'Chưa cập nhật' ? userGender : '';
+
+                // Show modal
+                const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+                editProfileModal.show();
+            });
+            
+            // Handle save profile button
+            document.getElementById('saveProfileBtn').addEventListener('click', function() {
+                updateUserProfile();
+            });
+            
+            // Handle change avatar button
+            document.getElementById('change-avatar-btn').addEventListener('click', function() {
+                document.getElementById('avatar-upload').click();
+            });
+            
+            // Handle avatar upload
+            document.getElementById('avatar-upload').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    uploadAvatar(e.target.files[0]);
+                }
+            });
+            
+            // Handle logout link
+            document.getElementById('logout-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        });
+        
+        // Load user profile
+        async function loadUserProfile() {
+            try {
+                const userId = localStorage.getItem('userId');
+
+                if (!userId) {
+                    throw new Error('Không tìm thấy thông tin người dùng');
+                }
+
+                await loadMockDataService();
+                const userData = await window.MockDataService.getUserById(userId);
+
+                // Update profile info
+                document.getElementById('user-name').textContent = userData.fullName || 'Chưa cập nhật';
+                document.getElementById('user-email').textContent = userData.email || 'Chưa cập nhật';
+                document.getElementById('user-phone').textContent = userData.phone || 'Chưa cập nhật';
+                document.getElementById('user-address').textContent = userData.address || 'Chưa cập nhật';
+                document.getElementById('user-gender').textContent = 'Chưa cập nhật';
+                document.getElementById('user-join-date').textContent = formatDate(userData.createdAt);
+
+                // Use default avatar for mock
+                let avatarUrl;
+
+                if (userData.avatar && userData.avatar.trim() !== '') {
+                    // Nếu avatar đã có http thì dùng luôn, nếu không thì thêm prefix
+                    if (userData.avatar.startsWith('http')) {
+                        avatarUrl = userData.avatar;
+                    } else {
+                        avatarUrl = `/${userData.avatar}`;
+                    }
+                } else {
+                    // Sử dụng ảnh mặc định
+                    avatarUrl = '/default_no_image.jpg';
+                }
+
+
+                // Use setTimeout to ensure DOM is ready
+                setTimeout(() => {
+                    const avatarElement = document.getElementById('user-avatar');
+
+                    if (avatarElement) {
+                        avatarElement.src = avatarUrl;
+
+                        // Force refresh
+                        avatarElement.style.display = 'none';
+                        avatarElement.offsetHeight; // Trigger reflow
+                        avatarElement.style.display = 'block';
+
+
+                        avatarElement.onerror = function() {
+                            this.src = 'assets/image/user-avatar.jpg';
+                        };
+
+                        // Double check after a moment
+                        setTimeout(() => {
+                        }, 500);
+                    } else {
+                    }
+                }, 100);
+
+            } catch (error) {
+                Swal.fire({
+                    title: 'Lỗi',
+                    text: 'Không thể tải thông tin người dùng',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+        
+
+        
+        // Update user profile
+        async function updateUserProfile() {
+            // Just show a toast message since this feature is under development
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                icon: 'info',
+                title: 'Thông báo',
+                text: 'Chức năng đang được phát triển'
+            });
+
+            // Hide modal
+            const editProfileModal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            editProfileModal.hide();
+        }
+        
+        // Upload avatar
+        async function uploadAvatar(file) {
+            // Just show a toast message since this feature is under development
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                icon: 'info',
+                title: 'Thông báo',
+                text: 'Chức năng đang được phát triển'
+            });
+        }
+
+        // Get current user data
+        async function getCurrentUserData() {
+            const userId = localStorage.getItem('userId');
+            const response = await fetch(`/api/users/${userId}`);
+            if (!response.ok) {
+                throw new Error('Không thể lấy thông tin người dùng');
+            }
+            return await response.json();
+        }
+
+        // Debug function to check avatar
+        function debugAvatar() {
+            const avatarElement = document.getElementById('user-avatar');
+        }
+
+        // Call debug after page load
+        setTimeout(debugAvatar, 3000);
+        
+        // Logout
+        function logout() {
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Bạn có chắc chắn muốn đăng xuất?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Đăng xuất',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Clear local storage
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('role');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('fullName');
+                    localStorage.removeItem('email');
+
+                    // Redirect to home page
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

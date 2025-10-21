@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .contact-banner {
+            position: relative;
+            height: 300px;
+            background-image: url('assets/image/contact-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .contact-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .contact-banner-content {
+            position: relative;
+            color: white;
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .contact-banner-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .contact-banner-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        
+        .contact-section {
+            margin-bottom: 50px;
+        }
+        
+        .contact-info-card {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-info-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .contact-info-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .contact-info-content {
+            color: #6c757d;
+        }
+        
+        .contact-form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-form-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 107, 0.25);
+        }
+        
+        .map-container {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        .store-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .store-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .store-card-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .store-card-info {
+            margin-bottom: 15px;
+        }
+        
+        .store-card-info i {
+            width: 20px;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .store-card-hours {
+            margin-bottom: 15px;
+        }
+        
+        .store-card-hours-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .store-card-hours-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .store-card-map {
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .store-card-map i {
+            margin-right: 5px;
+        }
+        
+        .faq-section {
+            margin-bottom: 50px;
+        }
+        
+        .faq-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .accordion-item {
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .accordion-button {
+            font-weight: 600;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: none;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(0, 0, 0, 0.125);
+        }
+        
+        .accordion-body {
+            padding: 20px;
+            background-color: #fff;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Contact Banner -->
+        <div class="contact-banner">
+            <div class="contact-banner-content">
+                <h1 class="contact-banner-title">Liên hệ với chúng tôi</h1>
+                <p class="contact-banner-subtitle">Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn</p>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- Contact Info Section -->
+            <section class="contact-section">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h3 class="contact-info-title">Địa chỉ</h3>
+                            <div class="contact-info-content">
+                                <p>123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh, Việt Nam</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <h3 class="contact-info-title">Điện thoại</h3>
+                            <div class="contact-info-content">
+                                <p>Hotline: (028) 3822 9999</p>
+                                <p>CSKH: (028) 3822 8888</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3 class="contact-info-title">Email</h3>
+                            <div class="contact-info-content">
+                                <p>info@tinashop.com</p>
+                                <p>support@tinashop.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Contact Form Section -->
+            <section class="contact-section">
+                <div class="row">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="contact-form-container">
+                            <h3 class="contact-form-title">Gửi tin nhắn cho chúng tôi</h3>
+                            <form id="contactForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Họ và tên</label>
+                                        <input type="text" class="form-control" id="name" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="phone">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Tiêu đề</label>
+                                    <input type="text" class="form-control" id="subject" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Nội dung</label>
+                                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Gửi tin nhắn</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="map-container">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4241674197956!2d106.70232161471815!3d10.777868992321388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f4670702e31%3A0xa5777fb3a5bb9972!2zMTIzIE5ndXnhu4VuIEh14buHLCBC4bq_biBOZ2jDqSwgUXXhuq1uIDEsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1620123456789!5m2!1svi!2s" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Our Stores Section -->
+            <section class="contact-section">
+                <h2 class="text-center mb-4">Hệ thống cửa hàng</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="store-card">
+                            <h4 class="store-card-title">Tina Shop - Chi nhánh Quận 1</h4>
+                            <div class="store-card-info">
+                                <p><i class="fas fa-map-marker-alt"></i> 123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</p>
+                                <p><i class="fas fa-phone-alt"></i> (028) 3822 9999</p>
+                                <p><i class="fas fa-envelope"></i> q1@tinashop.com</p>
+                            </div>
+                            <div class="store-card-hours">
+                                <h5 class="store-card-hours-title">Giờ mở cửa:</h5>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Hai - Thứ Sáu:</span>
+                                    <span>9:00 - 21:00</span>
+                                </div>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Bảy - Chủ Nhật:</span>
+                                    <span>9:00 - 22:00</span>
+                                </div>
+                            </div>
+                            <div class="store-card-map" onclick="openMap('123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh')">
+                                <i class="fas fa-map"></i> Xem bản đồ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="store-card">
+                            <h4 class="store-card-title">Tina Shop - Chi nhánh Quận 3</h4>
+                            <div class="store-card-info">
+                                <p><i class="fas fa-map-marker-alt"></i> 456 Đường Võ Văn Tần, Quận 3, TP. Hồ Chí Minh</p>
+                                <p><i class="fas fa-phone-alt"></i> (028) 3833 8888</p>
+                                <p><i class="fas fa-envelope"></i> q3@tinashop.com</p>
+                            </div>
+                            <div class="store-card-hours">
+                                <h5 class="store-card-hours-title">Giờ mở cửa:</h5>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Hai - Thứ Sáu:</span>
+                                    <span>9:00 - 21:00</span>
+                                </div>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Bảy - Chủ Nhật:</span>
+                                    <span>9:00 - 22:00</span>
+                                </div>
+                            </div>
+                            <div class="store-card-map" onclick="openMap('456 Đường Võ Văn Tần, Quận 3, TP. Hồ Chí Minh')">
+                                <i class="fas fa-map"></i> Xem bản đồ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="store-card">
+                            <h4 class="store-card-title">Tina Shop - Chi nhánh Quận 7</h4>
+                            <div class="store-card-info">
+                                <p><i class="fas fa-map-marker-alt"></i> 789 Đường Nguyễn Thị Thập, Quận 7, TP. Hồ Chí Minh</p>
+                                <p><i class="fas fa-phone-alt"></i> (028) 3844 7777</p>
+                                <p><i class="fas fa-envelope"></i> q7@tinashop.com</p>
+                            </div>
+                            <div class="store-card-hours">
+                                <h5 class="store-card-hours-title">Giờ mở cửa:</h5>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Hai - Thứ Sáu:</span>
+                                    <span>9:00 - 21:00</span>
+                                </div>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Bảy - Chủ Nhật:</span>
+                                    <span>9:00 - 22:00</span>
+                                </div>
+                            </div>
+                            <div class="store-card-map" onclick="openMap('789 Đường Nguyễn Thị Thập, Quận 7, TP. Hồ Chí Minh')">
+                                <i class="fas fa-map"></i> Xem bản đồ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="store-card">
+                            <h4 class="store-card-title">Tina Shop - Chi nhánh Hà Nội</h4>
+                            <div class="store-card-info">
+                                <p><i class="fas fa-map-marker-alt"></i> 101 Đường Bà Triệu, Quận Hoàn Kiếm, Hà Nội</p>
+                                <p><i class="fas fa-phone-alt"></i> (024) 3855 6666</p>
+                                <p><i class="fas fa-envelope"></i> hanoi@tinashop.com</p>
+                            </div>
+                            <div class="store-card-hours">
+                                <h5 class="store-card-hours-title">Giờ mở cửa:</h5>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Hai - Thứ Sáu:</span>
+                                    <span>9:00 - 21:00</span>
+                                </div>
+                                <div class="store-card-hours-item">
+                                    <span>Thứ Bảy - Chủ Nhật:</span>
+                                    <span>9:00 - 22:00</span>
+                                </div>
+                            </div>
+                            <div class="store-card-map" onclick="openMap('101 Đường Bà Triệu, Quận Hoàn Kiếm, Hà Nội')">
+                                <i class="fas fa-map"></i> Xem bản đồ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <h2 class="faq-title">Câu hỏi thường gặp</h2>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Tina Shop có chính sách đổi trả hàng không?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Có, Tina Shop có chính sách đổi trả trong vòng 7 ngày kể từ ngày mua hàng. Sản phẩm đổi trả phải còn nguyên tem, nhãn, hóa đơn và chưa qua sử dụng. Chúng tôi không áp dụng đổi trả cho các sản phẩm giảm giá hoặc khuyến mãi đặc biệt.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Tina Shop có giao hàng toàn quốc không?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Có, Tina Shop giao hàng toàn quốc. Thời gian giao hàng từ 1-3 ngày đối với các thành phố lớn và 3-5 ngày đối với các tỉnh thành khác. Phí giao hàng sẽ được tính dựa trên khoảng cách và trọng lượng sản phẩm.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Làm thế nào để trở thành thành viên VIP của Tina Shop?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Để trở thành thành viên VIP của Tina Shop, bạn cần đăng ký tài khoản trên website hoặc tại cửa hàng, sau đó tích lũy điểm thông qua các lần mua hàng. Khi đạt đến ngưỡng điểm nhất định, bạn sẽ được nâng cấp lên thành viên VIP và được hưởng nhiều ưu đãi đặc biệt.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Tina Shop có nhận đặt hàng theo yêu cầu không?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Có, Tina Shop có dịch vụ đặt hàng theo yêu cầu đối với một số sản phẩm nhất định. Bạn có thể liên hệ trực tiếp với cửa hàng hoặc gửi email đến info@tinashop.com để được tư vấn chi tiết về dịch vụ này.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeaderAndFooter();
+
+            // Handle contact form submission
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitContactForm();
+            });
+        });
+        
+        // Submit contact form
+        function submitContactForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // In a real application, you would call your API
+            // For now, we'll just show a success message
+            
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                
+                Swal.fire({
+                    title: 'Gửi tin nhắn thành công!',
+                    text: 'Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi trong thời gian sớm nhất.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                });
+            }, 1000);
+        }
+        
+        // Open map
+        function openMap(address) {
+            // Encode address for Google Maps URL
+            const encodedAddress = encodeURIComponent(address);
+            const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+            
+            // Open in new tab
+            window.open(mapUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

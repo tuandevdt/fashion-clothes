@@ -1,0 +1,112 @@
+body {
+  font-size: .875rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+/* Content */
+.main-content {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 60px; /* Để không bị footer che */
+}
+
+/* Cards */
+.card {
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Tables */
+.table-responsive {
+  margin-bottom: 1rem;
+}
+
+.table th {
+  border-top: none;
+  background-color: #f8f9fa;
+}
+
+/* Forms */
+.form-label {
+  font-weight: 500;
+}
+
+.required:after {
+  content: " *";
+  color: red;
+}
+
+/* Buttons */
+.btn-toolbar {
+  margin-bottom: 1rem;
+}
+
+/* Alerts */
+.alert {
+  margin-bottom: 1rem;
+}
+
+/* Pagination */
+.pagination {
+  margin-bottom: 0;
+}
+
+/* Modal */
+.modal-header {
+  background-color: #f8f9fa;
+}
+
+/* Image preview */
+.img-preview {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
+
+/* Status badges */
+.badge-success {
+  background-color: #28a745;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+}
+
+/* Loading spinner */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+/* Error text */
+.text-error {
+  color: #dc3545;
+}
+
+/* Success text */
+.text-success {
+  color: #28a745;
+}

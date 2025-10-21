@@ -1,0 +1,25 @@
+.badge {
+  padding: 0.4em 0.6em;
+  font-size: 0.75em;
+  border-radius: 0.25rem;
+}
+
+.badge-active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-inactive {
+  background-color: #dc3545;
+  color: white;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-label.required::after {
+  content: " *";
+  color: red;
+}

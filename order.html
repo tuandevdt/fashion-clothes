@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng của tôi - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .order-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .order-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .order-body {
+            padding: 20px;
+        }
+        
+        .order-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-shipping {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-delivered {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        
+        .order-item-details {
+            flex-grow: 1;
+        }
+        
+        .order-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .order-item-price {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .order-item-quantity {
+            margin-left: auto;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        
+        .filter-tabs {
+            margin-bottom: 30px;
+        }
+        
+        .filter-tabs .nav-link {
+            color: #6c757d;
+            border: none;
+            border-bottom: 2px solid transparent;
+            border-radius: 0;
+            padding: 10px 20px;
+        }
+        
+        .filter-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background-color: transparent;
+        }
+        
+        .empty-orders {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-orders i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <h1 class="mb-4">Đơn hàng của tôi</h1>
+        
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đơn hàng của tôi</li>
+            </ol>
+        </nav>
+        
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <ul class="nav nav-tabs" id="orderTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" onclick="filterOrders('all')">
+                        Tất cả
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" onclick="filterOrders('PENDING')">
+                        Chờ xác nhận
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab" data-bs-target="#confirmed" type="button" role="tab" onclick="filterOrders('CONFIRMED')">
+                        Đã xác nhận
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab" onclick="filterOrders('SHIPPING')">
+                        Đang giao
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="delivered-tab" data-bs-toggle="tab" data-bs-target="#delivered" type="button" role="tab" onclick="filterOrders('DELIVERED')">
+                        Đã giao
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled" type="button" role="tab" onclick="filterOrders('CANCELLED')">
+                        Đã hủy
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Orders Container -->
+        <div id="orders-container">
+            <!-- Orders will be loaded here via JavaScript -->
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
+                <p class="mt-2">Đang tải đơn hàng...</p>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Order pagination" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination will be generated via JavaScript -->
+            </ul>
+        </nav>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+
+            // Load layout components
+            loadLayoutComponents();
+            
+            // Load orders
+            loadOrders();
+        });
+
+        let currentPage = 0;
+        let currentStatus = 'all';
+        let pageSize = 10;
+
+        // Load orders
+        async function loadOrders(page = 1) {
+            const userId = localStorage.getItem('userId');
+            if (!userId) return;
+
+            console.log('=== BẮT ĐẦU TẢI ĐƠN HÀNG ===');
+            console.log('User ID:', userId);
+            console.log('Trang:', page);
+
+            try {
+                const url = `orders/find-all?userId=${userId}&page=${page}&limit=5`;
+                                console.log('Mock API call - no real backend');
+                
+                const response = await apiRequest(url);
+                console.log(' Kết quả từ API:', response);
+
+                // Lấy danh sách đơn hàng từ response.content
+                const orders = response && response.content ? response.content : [];
+                const ordersContainer = document.getElementById('orders-container');
+                if (!orders || orders.length === 0) {
+                    ordersContainer.innerHTML = `
+                        <div class="empty-orders">
+                            <i class="fas fa-shopping-bag"></i>
+                            <h5 class="text-muted">Chưa có đơn hàng nào</h5>
+                            <p class="text-muted">Hãy mua sắm ngay để có đơn hàng đầu tiên!</p>
+                            <a href="products.html" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>Mua sắm ngay
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Render từng đơn hàng
+                let html = '';
+                for (const order of orders) {
+                    html += await createOrderCard(order);
+                }
+                ordersContainer.innerHTML = html;
+
+                console.log('=== HOÀN TẤT TẢI ĐƠN HÀNG ===');
+            } catch (error) {
+                showToast('Không thể tải danh sách đơn hàng', 'error');
+            }
+        }
+
+        // Helper: Normalize image URL
+        function normalizeImageUrl(url) {
+            if (!url) return 'assets/image/default-image.avif';
+            if (url.startsWith('http')) return url;
+            return url.startsWith('/') ? url.substring(1) : url;
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+
+        // Get status class
+        function getStatusClass(status) {
+            const statusMap = {
+                'PENDING': 'status-pending',
+                'CONFIRMED': 'status-confirmed',
+                'SHIPPING': 'status-shipping',
+                'DELIVERED': 'status-delivered',
+                'CANCELLED': 'status-cancelled'
+            };
+            return statusMap[status] || 'status-pending';
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const statusMap = {
+                'PENDING': 'Chờ xác nhận',
+                'CONFIRMED': 'Đã xác nhận',
+                'SHIPPING': 'Đang giao hàng',
+                'DELIVERED': 'Đã giao hàng',
+                'CANCELLED': 'Đã hủy'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Create order card
+        async function createOrderCard(order) {
+            try {
+                // Lấy orderDetails trực tiếp từ order.orderDetails
+                const orderDetails = order.orderDetails || [];
+                const statusClass = getStatusClass(order.status);
+                const statusText = getStatusText(order.status);
+                const formattedDate = formatDate(order.orderDate);
+
+                let itemsHtml = '';
+                if (orderDetails.length > 0) {
+                    orderDetails.forEach(detail => {
+                        const imageUrl = normalizeImageUrl(detail.image);
+                        itemsHtml += `
+                            <div class="order-item">
+                                <img src="${imageUrl}" alt="${detail.productName}" class="order-item-image">
+                                <div class="order-item-details">
+                                    <div class="order-item-name">${detail.productName}</div>
+                                    <div class="order-item-price">${formatCurrency(detail.price)}</div>
+                                </div>
+                                <div class="order-item-quantity">x${detail.quantity}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    itemsHtml = '<div class="text-muted">Không có thông tin sản phẩm</div>';
+                }
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h6 class="mb-1">Đơn hàng #${order.id}</h6>
+                                    <small class="text-muted">Đặt ngày: ${formattedDate}</small>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <span class="order-status ${statusClass}">${statusText}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-body">
+                            <div class="order-items">
+                                ${itemsHtml}
+                            </div>
+                            <div class="row mt-3 pt-3 border-top">
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <strong>Địa chỉ giao hàng:</strong><br>
+                                        <span class="text-muted">${order.shippingAddress}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Phương thức thanh toán:</strong>
+                                        <span class="text-muted">${order.paymentMethod}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <div class="mb-2">
+                                        <strong>Tổng tiền: ${formatCurrency(order.totalAmount)}</strong>
+                                    </div>
+                                    <div class="d-flex gap-2 justify-content-md-end">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewOrderDetails(${order.id})">
+                                            <i class="fas fa-eye me-1"></i>Chi tiết
+                                        </button>
+                                        ${order.status === 'PENDING' ? `
+                                            <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder(${order.id})">
+                                                <i class="fas fa-times me-1"></i>Hủy đơn
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error creating order card:', error);
+                return `<div class="order-card"><div class="order-body"><div class="text-danger">Lỗi tải thông tin đơn hàng #${order.id}</div></div></div>`;
+            }
+        }
+
+        // View order details
+        function viewOrderDetails(orderId) {
+            // Redirect to order detail page (to be created)
+            window.location.href = `detail.html?id=${orderId}`;
+        }
+
+        // Cancel order
+        async function cancelOrder(orderId) {
+            try {
+                const result = await Swal.fire({
+                    title: 'Xác nhận hủy đơn hàng',
+                    text: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Hủy đơn hàng',
+                    cancelButtonText: 'Không'
+                });
+
+                if (result.isConfirmed) {
+                    await apiRequest(`orders/change-status/${orderId}`, 'PUT', { status: 'CANCELLED' });
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã hủy đơn hàng',
+                        text: 'Đơn hàng đã được hủy thành công',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Reload orders
+                    loadOrders(currentPage, currentStatus);
+                }
+            } catch (error) {
+                console.error('Error cancelling order:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Không thể hủy đơn hàng. Vui lòng thử lại sau.'
+                });
+            }
+        }
+
+        // Load layout components
+        function loadLayoutComponents() {
+            // Load header
+            fetch('layout/header.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('header-container').innerHTML = html;
+                    // Nếu không có file header.js thì bỏ đoạn này:
+                    // const headerScript = document.createElement('script');
+                    // headerScript.src = 'layout/header/header.js';
+                    // document.body.appendChild(headerScript);
+                });
+
+            // Load footer
+            fetch('layout/footer.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('footer-container').innerHTML = html;
+                });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,36 @@
+.img-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.badge {
+  padding: 0.4em 0.6em;
+  font-size: 0.75em;
+  border-radius: 0.25rem;
+}
+
+.badge-draft {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-published {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-archived {
+  background-color: #6c757d;
+  color: white;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+}
+
+.blog-content {
+  max-height: 300px;
+  overflow-y: auto;
+}

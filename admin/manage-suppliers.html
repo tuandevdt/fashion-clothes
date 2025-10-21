@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý nhà cung cấp - Tina Shop Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <!-- Common CSS -->
+  <link rel="stylesheet" href="assets/css/admin-common.css">
+  <!-- Layout CSS -->
+  <link rel="stylesheet" href="assets/css/admin-header.css">
+  <link rel="stylesheet" href="assets/css/admin-sidebar.css">
+  <link rel="stylesheet" href="assets/css/admin-footer.css">
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="assets/css/manage-suppliers.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+      
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Quản lý nhà cung cấp</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary me-2" id="btnAddSupplier">
+              <i class="bi bi-plus-circle"></i> Thêm nhà cung cấp
+            </button>
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary">Xuất Excel</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">In</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bộ lọc -->
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label for="filterStatus" class="form-label">Trạng thái</label>
+                    <select class="form-select" id="filterStatus">
+                      <option value="">Tất cả trạng thái</option>
+                      <option value="true">Hoạt động</option>
+                      <option value="false">Ngừng hoạt động</option>
+                    </select>
+                  </div>
+                  <div class="col-md-8">
+                    <label for="searchSupplier" class="form-label">Tìm kiếm</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="searchSupplier" placeholder="Tên, email, số điện thoại...">
+                      <button class="btn btn-outline-secondary" type="button" id="btnSearch">
+                        <i class="bi bi-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Danh sách nhà cung cấp -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th width="50">#</th>
+                        <th>Tên nhà cung cấp</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Trạng thái</th>
+                        <th width="150">Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody id="supplierTable">
+                      <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                      <tr>
+                        <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Phân trang -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div>
+                    <span id="totalSuppliers">0</span> nhà cung cấp
+                  </div>
+                  <div id="pagination" class="pagination-container">
+                    <!-- Phân trang sẽ được thêm bằng JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Modal thêm/sửa nhà cung cấp -->
+  <div class="modal fade" id="supplierModal" tabindex="-1" aria-labelledby="supplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="supplierModalLabel">Thêm nhà cung cấp mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="supplierForm">
+            <input type="hidden" id="supplierId">
+            
+            <div class="mb-3">
+              <label for="supplierName" class="form-label required">Tên nhà cung cấp</label>
+              <input type="text" class="form-control" id="supplierName" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="supplierEmail" class="form-label required">Email</label>
+              <input type="email" class="form-control" id="supplierEmail" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="supplierPhone" class="form-label required">Số điện thoại</label>
+              <input type="tel" class="form-control" id="supplierPhone" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="supplierAddress" class="form-label">Địa chỉ</label>
+              <textarea class="form-control" id="supplierAddress" rows="3"></textarea>
+            </div>
+            
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="supplierStatus" checked>
+              <label class="form-check-label" for="supplierStatus">
+                Hoạt động
+              </label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-primary" id="btnSaveSupplier">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+  <!-- Common JS --><script src="assets/js/admin-common.js"></script>
+  <!-- Layout JS --><script src="assets/js/admin-header.js"></script><script src="assets/js/admin-sidebar.js"></script><!-- Page JS --><script src="assets/js/manage-suppliers.js"></script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo cáo tồn kho - Tina Shop Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <!-- Chart.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+  <!-- Common CSS -->
+  <link rel="stylesheet" href="assets/css/admin-common.css">
+  <!-- Layout CSS -->
+  <link rel="stylesheet" href="assets/css/admin-header.css">
+  <link rel="stylesheet" href="assets/css/admin-sidebar.css">
+  <link rel="stylesheet" href="assets/css/admin-footer.css">
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="assets/css/admin-reports.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+      
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Báo cáo tồn kho</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="btnExportPDF">
+                <i class="bi bi-file-pdf"></i> Xuất PDF
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="btnExportExcel">
+                <i class="bi bi-file-excel"></i> Xuất Excel
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="btnPrint">
+                <i class="bi bi-printer"></i> In
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bộ lọc -->
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label for="filterCategory" class="form-label">Danh mục</label>
+                    <select class="form-select" id="filterCategory">
+                      <option value="">Tất cả danh mục</option>
+                      <!-- Options will be loaded by JavaScript -->
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="filterSupplier" class="form-label">Nhà cung cấp</label>
+                    <select class="form-select" id="filterSupplier">
+                      <option value="">Tất cả nhà cung cấp</option>
+                      <!-- Options will be loaded by JavaScript -->
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="filterStock" class="form-label">Tình trạng tồn kho</label>
+                    <select class="form-select" id="filterStock">
+                      <option value="">Tất cả</option>
+                      <option value="low">Sắp hết hàng</option>
+                      <option value="out">Hết hàng</option>
+                      <option value="overstock">Tồn kho cao</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button class="btn btn-primary w-100" id="btnApplyFilter">
+                      <i class="bi bi-funnel"></i> Áp dụng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tổng quan -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card text-white bg-primary">
+              <div class="card-body">
+                <h5 class="card-title">Tổng sản phẩm</h5>
+                <h2 class="card-text" id="totalProducts">0</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-success">
+              <div class="card-body">
+                <h5 class="card-title">Tổng tồn kho</h5>
+                <h2 class="card-text" id="totalStock">0</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-danger">
+              <div class="card-body">
+                <h5 class="card-title">Sản phẩm sắp hết</h5>
+                <h2 class="card-text" id="lowStockProducts">0</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-warning">
+              <div class="card-body">
+                <h5 class="card-title">Giá trị tồn kho</h5>
+                <h2 class="card-text" id="inventoryValue">0 ₫</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Biểu đồ tồn kho -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Tồn kho theo danh mục</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="categoryStockChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Giá trị tồn kho theo danh mục</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="categoryValueChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bảng chi tiết -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Chi tiết tồn kho</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th width="50">#</th>
+                        <th width="80">Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Nhà cung cấp</th>
+                        <th>Giá</th>
+                        <th>Tồn kho</th>
+                        <th>Giá trị</th>
+                        <th>Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody id="inventoryTable">
+                      <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                      <tr>
+                        <td colspan="9" class="text-center">Đang tải dữ liệu...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Phân trang -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div>
+                    <span id="displayedProducts">0</span> / <span id="totalFilteredProducts">0</span> sản phẩm
+                  </div>
+                  <div id="pagination" class="pagination-container">
+                    <!-- Phân trang sẽ được thêm bằng JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <!-- Common JS -->
+  <script src="assets/js/admin-common.js"></script>
+  <!-- Layout JS -->
+  <script src="assets/js/admin-header.js"></script>
+  <script src="assets/js/admin-sidebar.js"></script>
+  <!-- Mock Data -->
+  <script src="../assets/data/admin-data.js"></script>
+  <!-- Page JS -->
+  <script src="assets/js/admin-reports-inventory.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng của tôi - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .account-sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .account-sidebar-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .account-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .account-menu-item {
+            margin-bottom: 10px;
+        }
+        
+        .account-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .account-menu-link:hover {
+            background-color: #e9ecef;
+        }
+        
+        .account-menu-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .account-menu-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .account-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .account-content-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .order-card-header {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-card-body {
+            padding: 15px;
+        }
+        
+        .order-card-footer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .order-id {
+            font-weight: 600;
+        }
+        
+        .order-date {
+            color: #6c757d;
+        }
+        
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .order-status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .order-status-processing {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .order-status-shipped {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .order-status-delivered {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .order-status-cancelled {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .order-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .order-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        
+        .order-item-details {
+            flex-grow: 1;
+        }
+        
+        .order-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .order-item-price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .order-item-quantity {
+            color: #6c757d;
+        }
+        
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .order-summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .empty-orders {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .empty-orders-icon {
+            font-size: 5rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .order-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .order-filter-select {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <h1 class="mb-4">Đơn hàng của tôi</h1>
+        
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="index.html">Tài khoản của tôi</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đơn hàng của tôi</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <!-- Account Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="account-sidebar">
+                    <h3 class="account-sidebar-title">Tài khoản</h3>
+                    <ul class="account-menu">
+                        <li class="account-menu-item">
+                            <a href="index.html" class="account-menu-link">
+                                <span class="account-menu-icon"><i class="fas fa-user"></i></span>
+                                Thông tin tài khoản
+                            </a>
+                        </li>
+                        <li class="account-menu-item">
+                            <a href="orders.html" class="account-menu-link active">
+                                <span class="account-menu-icon"><i class="fas fa-shopping-bag"></i></span>
+                                Đơn hàng của tôi
+                            </a>
+                        </li>
+
+                        <li class="account-menu-item">
+                            <a href="change-password.html" class="account-menu-link">
+                                <span class="account-menu-icon"><i class="fas fa-lock"></i></span>
+                                Đổi mật khẩu
+                            </a>
+                        </li>
+                        <li class="account-menu-item">
+                            <a href="#" class="account-menu-link" id="logout-link">
+                                <span class="account-menu-icon"><i class="fas fa-sign-out-alt"></i></span>
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Account Content -->
+            <div class="col-lg-9">
+                <div class="account-content">
+                    <h2 class="account-content-title">Đơn hàng của tôi</h2>
+                    
+                    <!-- Order Filter -->
+                    <div class="order-filter">
+                        <div class="order-filter-select">
+                            <select class="form-select" id="orderStatusFilter">
+                                <option value="all">Tất cả đơn hàng</option>
+                                <option value="pending">Chờ xác nhận</option>
+                                <option value="processing">Đang xử lý</option>
+                                <option value="shipped">Đang giao hàng</option>
+                                <option value="delivered">Đã giao hàng</option>
+                                <option value="cancelled">Đã hủy</option>
+                            </select>
+                        </div>
+                        <div class="order-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Tìm kiếm đơn hàng..." id="orderSearchInput">
+                                <button class="btn btn-outline-primary" type="button" id="orderSearchBtn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="orders-container">
+                        <!-- Orders will be loaded here -->
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Đang tải đơn hàng...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            if (!isLoggedIn()) {
+                // Redirect to login page
+                Swal.fire({
+                    title: 'Yêu cầu đăng nhập',
+                    text: 'Vui lòng đăng nhập để xem đơn hàng của bạn',
+                    icon: 'warning',
+                    confirmButtonText: 'Đăng nhập'
+                }).then(() => {
+                    window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+                });
+                return;
+            }
+
+            // Load header and footer first, then load orders
+            loadHeaderAndFooter().then(() => {
+                loadOrders();
+            });
+            
+            // Handle status filter change
+            document.getElementById('orderStatusFilter').addEventListener('change', function() {
+                loadOrders(this.value);
+            });
+            
+            // Handle search button click
+            document.getElementById('orderSearchBtn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('orderSearchInput').value.trim();
+                if (searchTerm) {
+                    searchOrders(searchTerm);
+                } else {
+                    loadOrders();
+                }
+            });
+            
+            // Handle search input enter key
+            document.getElementById('orderSearchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value.trim();
+                    if (searchTerm) {
+                        searchOrders(searchTerm);
+                    } else {
+                        loadOrders();
+                    }
+                }
+            });
+            
+            // Handle logout link
+            document.getElementById('logout-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        });
+        
+        // Load orders
+        function loadOrders(status = 'all') {
+            const ordersContainer = document.getElementById('orders-container');
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                ordersContainer.innerHTML = '<div class="empty-orders"><div class="empty-orders-icon"><i class="fas fa-shopping-bag"></i></div><h3>Bạn chưa đăng nhập</h3><a href="login.html" class="btn btn-primary">Đăng nhập</a></div>';
+                return;
+            }
+            ordersContainer.innerHTML = `<div class="text-center py-3"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Đang tải đơn hàng...</p></div>`;
+            let statusParam = status === 'all' ? undefined : status;
+            apiService.getOrders({ userId, status: statusParam, page: 1, limit: 10 }).then(response => {
+                const orders = response.items || response.data || [];
+                if (orders.length === 0) {
+                    ordersContainer.innerHTML = `<div class="empty-orders"><div class="empty-orders-icon"><i class="fas fa-shopping-bag"></i></div><h3>Không có đơn hàng nào</h3><p class="mb-4">Bạn chưa có đơn hàng nào trong danh sách này</p><a href="index.html" class="btn btn-primary">Tiếp tục mua sắm</a></div>`;
+                    return;
+                }
+                ordersContainer.innerHTML = '';
+                orders.forEach(order => {
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'order-card';
+                    
+                    // Get status text and class
+                    let statusText, statusClass;
+                    switch (order.status) {
+                        case 'pending':
+                            statusText = 'Chờ xác nhận';
+                            statusClass = 'order-status-pending';
+                            break;
+                        case 'processing':
+                            statusText = 'Đang xử lý';
+                            statusClass = 'order-status-processing';
+                            break;
+                        case 'shipped':
+                            statusText = 'Đang giao hàng';
+                            statusClass = 'order-status-shipped';
+                            break;
+                        case 'delivered':
+                            statusText = 'Đã giao hàng';
+                            statusClass = 'order-status-delivered';
+                            break;
+                        case 'cancelled':
+                            statusText = 'Đã hủy';
+                            statusClass = 'order-status-cancelled';
+                            break;
+                        default:
+                            statusText = 'Không xác định';
+                            statusClass = '';
+                    }
+                    
+                    orderElement.innerHTML = `
+                        <div class="order-card-header">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <div class="order-id">Đơn hàng #${order.id}</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="order-date">${formatDate(order.date)}</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="order-status ${statusClass}">${statusText}</span>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="viewOrderDetails('${order.id}')">
+                                        Xem chi tiết
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-items">
+                                ${order.items.map(item => `
+                                    <div class="order-item">
+                                        <img src="${item.imageUrl}" alt="${item.name}" class="order-item-image">
+                                        <div class="order-item-details">
+                                            <h5 class="order-item-title">${item.name}</h5>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="order-item-price">${formatCurrency(item.price)}</div>
+                                                <div class="order-item-quantity">x${item.quantity}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="order-card-footer">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <div class="order-summary-total">
+                                        <span>Tổng tiền:</span>
+                                        <span>${formatCurrency(order.total)}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <div class="order-actions">
+                                        ${order.status === 'pending' ? `
+                                            <button class="btn btn-sm btn-danger" onclick="cancelOrder('${order.id}')">
+                                                Hủy đơn hàng
+                                            </button>
+                                        ` : ''}
+                                        ${order.status === 'delivered' ? `
+                                            <button class="btn btn-sm btn-primary" onclick="reviewOrder('${order.id}')">
+                                                Đánh giá
+                                            </button>
+                                        ` : ''}
+                                        <button class="btn btn-sm btn-outline-primary" onclick="reorderItems('${order.id}')">
+                                            Mua lại
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    ordersContainer.appendChild(orderElement);
+                });
+            }).catch(() => {
+                ordersContainer.innerHTML = '<div class="col-12 text-center py-5 text-danger">Không thể tải đơn hàng.</div>';
+            });
+        }
+        
+        // Search orders
+        function searchOrders(searchTerm) {
+            // In a real application, you would call your API with the search term
+            // For now, we'll just reload all orders
+            loadOrders();
+            
+            // Show message
+            showToast(`Đang tìm kiếm đơn hàng với từ khóa: ${searchTerm}`);
+        }
+        
+        // View order details
+        function viewOrderDetails(orderId) {
+            // In a real application, you would redirect to a detailed order page
+            // For now, we'll just show a modal with the order details
+            Swal.fire({
+                title: `Chi tiết đơn hàng #${orderId}`,
+                text: 'Chức năng này sẽ được triển khai sau',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }
+        
+        // Cancel order
+        function cancelOrder(orderId) {
+            Swal.fire({
+                title: 'Xác nhận hủy đơn hàng',
+                text: `Bạn có chắc chắn muốn hủy đơn hàng #${orderId}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Hủy đơn hàng',
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // In a real application, you would call your API
+                    // For now, we'll just reload the orders
+                    showLoading();
+                    
+                    setTimeout(() => {
+                        hideLoading();
+                        loadOrders();
+                        showToast('Đơn hàng đã được hủy');
+                    }, 1000);
+                }
+            });
+        }
+        
+        // Review order
+        function reviewOrder(orderId) {
+            // In a real application, you would redirect to a review page
+            // For now, we'll just show a modal
+            Swal.fire({
+                title: `Đánh giá đơn hàng #${orderId}`,
+                text: 'Chức năng này sẽ được triển khai sau',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }
+        
+        // Reorder items
+        function reorderItems(orderId) {
+            Swal.fire({
+                title: 'Xác nhận mua lại',
+                text: `Bạn có muốn thêm tất cả sản phẩm từ đơn hàng #${orderId} vào giỏ hàng?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Thêm vào giỏ hàng',
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // In a real application, you would call your API
+                    // For now, we'll just show a success message
+                    showLoading();
+                    
+                    setTimeout(() => {
+                        hideLoading();
+                        showToast('Đã thêm sản phẩm vào giỏ hàng');
+                    }, 1000);
+                }
+            });
+        }
+        
+        // Logout
+        function logout() {
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Bạn có chắc chắn muốn đăng xuất?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Đăng xuất',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Clear local storage
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('role');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('fullName');
+                    localStorage.removeItem('email');
+                    
+                    // Redirect to home page
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

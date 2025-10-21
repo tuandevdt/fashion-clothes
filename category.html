@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh mục sản phẩm - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .category-banner {
+            position: relative;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .category-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .category-banner-content {
+            position: relative;
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .category-banner-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .category-banner-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            height: 250px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .category-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: opacity 0.3s ease;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .category-count {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .subcategory-list {
+            margin-top: 20px;
+        }
+        
+        .subcategory-item {
+            margin-bottom: 10px;
+        }
+        
+        .subcategory-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .subcategory-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .subcategory-icon {
+            margin-right: 10px;
+        }
+        
+        .subcategory-count {
+            margin-left: auto;
+            background-color: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .subcategory-link:hover .subcategory-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Category Banner -->
+        <div class="category-banner" id="category-banner" style="background-image: url('assets/image/category-banner.jpg');">
+            <div class="category-banner-content">
+                <h1 class="category-banner-title">Danh mục sản phẩm</h1>
+                <p class="category-banner-description">Khám phá các sản phẩm thời trang nữ cao cấp tại Tina Shop</p>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- Main Categories -->
+            <section class="main-categories mb-5">
+                <h2 class="text-center mb-4">Danh mục chính</h2>
+                <div class="row" id="main-categories-container">
+                    <!-- Main categories will be loaded here -->
+                    <div class="col-12 text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Đang tải danh mục...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Popular Categories -->
+            <section class="popular-categories mb-5">
+                <h2 class="text-center mb-4">Danh mục phổ biến</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="category-card">
+                            <img src="assets/image/category-bags.jpg" alt="Túi xách" class="img-fluid">
+                            <div class="category-overlay">
+                                <h3 class="category-title">Túi xách</h3>
+                                <div class="category-count">24 sản phẩm</div>
+                                <a href="detail.html?category=bags" class="btn btn-outline-light">Xem thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="category-card">
+                            <img src="assets/image/category-wallets.jpg" alt="Ví" class="img-fluid">
+                            <div class="category-overlay">
+                                <h3 class="category-title">Ví</h3>
+                                <div class="category-count">18 sản phẩm</div>
+                                <a href="detail.html?category=wallets" class="btn btn-outline-light">Xem thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="category-card">
+                            <img src="assets/image/category-accessories.jpg" alt="Phụ kiện" class="img-fluid">
+                            <div class="category-overlay">
+                                <h3 class="category-title">Phụ kiện</h3>
+                                <div class="category-count">32 sản phẩm</div>
+                                <a href="detail.html?category=accessories" class="btn btn-outline-light">Xem thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Subcategories -->
+            <section class="subcategories mb-5">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <h3 class="mb-3">Túi xách</h3>
+                        <ul class="list-unstyled subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=handbags" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-shopping-bag"></i></span>
+                                    <span>Túi xách tay</span>
+                                    <span class="subcategory-count">12</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=crossbody-bags" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-shopping-bag"></i></span>
+                                    <span>Túi đeo chéo</span>
+                                    <span class="subcategory-count">8</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=backpacks" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-shopping-bag"></i></span>
+                                    <span>Balo</span>
+                                    <span class="subcategory-count">6</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=tote-bags" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-shopping-bag"></i></span>
+                                    <span>Túi tote</span>
+                                    <span class="subcategory-count">5</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h3 class="mb-3">Ví</h3>
+                        <ul class="list-unstyled subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=long-wallets" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-wallet"></i></span>
+                                    <span>Ví dài</span>
+                                    <span class="subcategory-count">10</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=short-wallets" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-wallet"></i></span>
+                                    <span>Ví ngắn</span>
+                                    <span class="subcategory-count">8</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=card-holders" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-credit-card"></i></span>
+                                    <span>Ví đựng thẻ</span>
+                                    <span class="subcategory-count">6</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=coin-purses" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-coins"></i></span>
+                                    <span>Ví đựng tiền xu</span>
+                                    <span class="subcategory-count">4</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h3 class="mb-3">Phụ kiện</h3>
+                        <ul class="list-unstyled subcategory-list">
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=belts" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-circle-notch"></i></span>
+                                    <span>Thắt lưng</span>
+                                    <span class="subcategory-count">8</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=scarves" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-scarf"></i></span>
+                                    <span>Khăn quàng cổ</span>
+                                    <span class="subcategory-count">12</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=hats" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-hat-cowboy"></i></span>
+                                    <span>Mũ</span>
+                                    <span class="subcategory-count">6</span>
+                                </a>
+                            </li>
+                            <li class="subcategory-item">
+                                <a href="detail.html?category=gloves" class="subcategory-link">
+                                    <span class="subcategory-icon"><i class="fas fa-mitten"></i></span>
+                                    <span>Găng tay</span>
+                                    <span class="subcategory-count">4</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load main categories
+            loadMainCategories();
+            
+            // Check if category parameter is present in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+            
+            if (categoryParam) {
+                // Update banner with category info
+                updateCategoryBanner(categoryParam);
+            }
+        });
+        
+        // Load main categories
+        function loadMainCategories() {
+            const mainCategoriesContainer = document.getElementById('main-categories-container');
+            
+            // In a real application, you would call your API
+            // For now, we'll simulate an API call with mock data
+            setTimeout(() => {
+                // Mock categories data
+                const categories = [
+                    {
+                        id: 1,
+                        name: 'Túi xách',
+                        slug: 'bags',
+                        imageUrl: 'assets/image/category-bags.jpg',
+                        productCount: 24
+                    },
+                    {
+                        id: 2,
+                        name: 'Ví',
+                        slug: 'wallets',
+                        imageUrl: 'assets/image/category-wallets.jpg',
+                        productCount: 18
+                    },
+                    {
+                        id: 3,
+                        name: 'Phụ kiện',
+                        slug: 'accessories',
+                        imageUrl: 'assets/image/category-accessories.jpg',
+                        productCount: 32
+                    },
+                    {
+                        id: 4,
+                        name: 'Túi du lịch',
+                        slug: 'travel-bags',
+                        imageUrl: 'assets/image/category-travel.jpg',
+                        productCount: 15
+                    },
+                    {
+                        id: 5,
+                        name: 'Túi laptop',
+                        slug: 'laptop-bags',
+                        imageUrl: 'assets/image/category-laptop.jpg',
+                        productCount: 10
+                    },
+                    {
+                        id: 6,
+                        name: 'Túi thể thao',
+                        slug: 'sport-bags',
+                        imageUrl: 'assets/image/category-sport.jpg',
+                        productCount: 8
+                    }
+                ];
+                
+                // Generate categories HTML
+                mainCategoriesContainer.innerHTML = '';
+                
+                categories.forEach(category => {
+                    const categoryElement = document.createElement('div');
+                    categoryElement.className = 'col-md-4 mb-4';
+                    categoryElement.innerHTML = `
+                        <div class="category-card">
+                            <img src="${category.imageUrl}" alt="${category.name}" class="img-fluid">
+                            <div class="category-overlay">
+                                <h3 class="category-title">${category.name}</h3>
+                                <div class="category-count">${category.productCount} sản phẩm</div>
+                                <a href="detail.html?category=${category.slug}" class="btn btn-outline-light">Xem thêm</a>
+                            </div>
+                        </div>
+                    `;
+                    
+                    mainCategoriesContainer.appendChild(categoryElement);
+                });
+            }, 500);
+        }
+        
+        // Update category banner
+        function updateCategoryBanner(categorySlug) {
+            // In a real application, you would call your API to get category details
+            // For now, we'll use a switch statement with mock data
+            let categoryName, categoryDescription, bannerImage;
+            
+            switch (categorySlug) {
+                case 'bags':
+                    categoryName = 'Túi xách';
+                    categoryDescription = 'Khám phá bộ sưu tập túi xách cao cấp với nhiều kiểu dáng và màu sắc đa dạng';
+                    bannerImage = 'assets/image/category-banner-bags.jpg';
+                    break;
+                case 'wallets':
+                    categoryName = 'Ví';
+                    categoryDescription = 'Bộ sưu tập ví da cao cấp với thiết kế tinh tế và chất lượng bền đẹp';
+                    bannerImage = 'assets/image/category-banner-wallets.jpg';
+                    break;
+                case 'accessories':
+                    categoryName = 'Phụ kiện';
+                    categoryDescription = 'Hoàn thiện phong cách của bạn với các phụ kiện thời trang đẳng cấp';
+                    bannerImage = 'assets/image/category-banner-accessories.jpg';
+                    break;
+                default:
+                    return; // If category not found, keep default banner
+            }
+            
+            // Update banner
+            const banner = document.getElementById('category-banner');
+            banner.style.backgroundImage = `url('${bannerImage}')`;
+            
+            // Update banner content
+            const bannerContent = banner.querySelector('.category-banner-content');
+            bannerContent.innerHTML = `
+                <h1 class="category-banner-title">${categoryName}</h1>
+                <p class="category-banner-description">${categoryDescription}</p>
+            `;
+            
+            // Update page title
+            document.title = `${categoryName} - Tina Shop`;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

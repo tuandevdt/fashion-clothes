@@ -1,0 +1,234 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+        <div class="container">
+            <a class="navbar-brand" href="#" id="home-link">
+                <img src="assets/image/logo.png" alt="Tina Shop" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-home">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-products">Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-about">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-contact">Liên hệ</a>
+                    </li>
+                    <li class="nav-item" id="my-orders-nav" style="display:none;">
+                        <a class="nav-link" href="#" id="nav-orders"><i class="fas fa-box"></i> Đơn hàng của tôi</a>
+                    </li>
+                    <li class="nav-item" id="logout-nav" style="display:none;">
+                        <a class="nav-link" href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <a href="#" id="cart-link" class="btn btn-link position-relative me-2">
+                        <i class="fas fa-shopping-cart fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count" style="display: inline;">
+                            0
+                        </span>
+                    </a>
+
+                    <!-- Login/Register buttons for non-logged in users -->
+                    <div id="auth-buttons">
+                        <a href="#" id="login-link" class="btn btn-outline-primary me-2">Đăng nhập</a>
+                        <a href="#" id="register-link" class="btn btn-primary">Đăng ký</a>
+                    </div>
+
+                    <!-- User dropdown for logged in users -->
+                    <div class="dropdown d-none" id="user-dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img id="user-avatar" src="" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                            <span id="user-name">Tài khoản</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="account-link">Thông tin tài khoản</a></li>
+                            <li><a class="dropdown-item" href="#" id="orders-link">Lịch sử đặt hàng</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<script>
+// Header authentication state management
+// Remove DOMContentLoaded listener since header is loaded dynamically
+// updateHeaderAuthState will be called from common.js after header is loaded
+
+function updateHeaderAuthState() {
+    const userId = localStorage.getItem('userId');
+    const fullName = localStorage.getItem('fullName');
+    const authButtons = document.getElementById('auth-buttons');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    // Setup navigation links
+    setupNavigationLinks();
+
+    if (userId) {
+        // User is logged in - fetch user details from API
+        fetchUserDetails(userId);
+        authButtons.classList.add('d-none');
+        userDropdown.classList.remove('d-none');
+
+        // Setup logout functionality
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+    } else {
+        // User is not logged in
+        authButtons.classList.remove('d-none');
+        userDropdown.classList.add('d-none');
+    }
+
+    // Update cart count
+    updateCartCount();
+}
+
+function setupNavigationLinks() {
+    // All files are now in root directory
+    const basePath = '';
+
+    // Setup navigation links
+    const homeLink = document.getElementById('home-link');
+    const navHome = document.getElementById('nav-home');
+    const navProducts = document.getElementById('nav-products');
+    const navBlog = document.getElementById('nav-blog');
+    const navAbout = document.getElementById('nav-about');
+    const navContact = document.getElementById('nav-contact');
+    const navOrders = document.getElementById('nav-orders');
+    const cartLink = document.getElementById('cart-link');
+    const loginLink = document.getElementById('login-link');
+    const registerLink = document.getElementById('register-link');
+    const accountLink = document.getElementById('account-link');
+    const ordersLink = document.getElementById('orders-link');
+
+    if (homeLink) homeLink.href = basePath + 'index.html';
+    if (navHome) navHome.href = basePath + 'index.html';
+    if (navProducts) navProducts.href = basePath + 'products.html';
+    if (navBlog) navBlog.href = basePath + 'blog.html';
+    if (navAbout) navAbout.href = basePath + 'about.html';
+    if (navContact) navContact.href = basePath + 'contact.html';
+    if (navOrders) navOrders.href = basePath + 'order-history.html';
+    if (cartLink) cartLink.href = basePath + 'cart.html';
+    if (loginLink) loginLink.href = basePath + 'login.html';
+    if (registerLink) registerLink.href = basePath + 'register.html';
+    if (accountLink) accountLink.href = basePath + 'account.html';
+    if (ordersLink) ordersLink.href = basePath + 'order-history.html';
+}
+
+async function fetchUserDetails(userId) {
+
+    try {
+        // Mock user data
+        const userData = {
+            id: userId,
+            username: localStorage.getItem('username') || 'user',
+            fullname: localStorage.getItem('fullName') || 'Mock User',
+            email: localStorage.getItem('email') || 'mock@example.com',
+            avatar: null
+        };
+        
+        updateUserDisplay(userData);
+    } catch (error) {
+        const fullName = localStorage.getItem('fullName');
+        if (fullName) {
+            document.getElementById('user-name').textContent = fullName;
+        }
+    }
+}
+
+function updateUserDisplay(userData) {
+   
+
+    const userNameSpan = document.getElementById('user-name');
+    const userAvatar = document.getElementById('user-avatar');
+
+    
+
+    // Update user name
+    const displayName = userData.fullname || userData.username;
+
+    if (userNameSpan) {
+        userNameSpan.textContent = displayName;
+        
+    }
+
+    // Update avatar - use default image for mock
+    const avatarUrl = 'assets/image/default-image.avif';
+
+    if (userAvatar) {
+        userAvatar.src = avatarUrl;
+        userAvatar.style.display = 'block';
+    }
+}
+
+function logout() {
+    // Clear localStorage
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
+    localStorage.removeItem('fullName');
+    localStorage.removeItem('email');
+
+    // Update header state
+    updateHeaderAuthState();
+
+    // Determine correct path to home
+    // Redirect to home page  
+    window.location.href = 'index.html';
+}
+
+async function updateCartCount() {
+    const userId = localStorage.getItem('userId');
+    const cartCountElement = document.getElementById('cart-count');
+
+    if (!cartCountElement) {
+        return;
+    }
+
+    // Luôn hiển thị cart icon
+    cartCountElement.style.display = 'inline';
+
+    if (!userId) {
+        cartCountElement.textContent = '0';
+        return;
+    }
+
+    try {
+        // Always use fake cart count
+        if (window.MockDataService) {
+            const fakeCartCount = window.MockDataService.cart.length;
+            cartCountElement.textContent = fakeCartCount;
+        } else {
+            cartCountElement.textContent = '3'; // Default fake count
+        }
+    } catch (error) {
+        cartCountElement.textContent = '3'; // Default fake count
+    }
+}
+
+// Make functions globally available
+window.updateHeaderAuthState = updateHeaderAuthState;
+window.logout = logout;
+window.fetchUserDetails = fetchUserDetails;
+window.updateUserDisplay = updateUserDisplay;
+</script>

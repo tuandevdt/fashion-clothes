@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div class="auth-container">
+            <h2 class="text-center mb-4">Đăng nhập</h2>
+            
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Nhập email của bạn" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">
+                        Ghi nhớ đăng nhập
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+                </button>
+            </form>
+            
+            <div class="text-center">
+                <a href="#" id="forgotPasswordLink" class="text-decoration-none">Quên mật khẩu?</a>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="text-center">
+                <p>Chưa có tài khoản? <a href="register.html" class="text-decoration-none fw-bold">Đăng ký ngay</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Mock Data Service -->
+    <script src="assets/data/mock-data-service.js"></script>
+    <!-- Auth Service -->
+    <script src="assets/js/services/auth-service.js"></script>
+    <!-- Common JS -->
+    <script src="assets/js/common.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeaderAndFooter();
+            
+            const loginForm = document.getElementById('loginForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                const icon = togglePassword.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+            
+            // Handle login form submission
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                
+                // Validate form data
+                if (!email || !password) {
+                    Swal.fire({
+                        title: 'Lỗi',
+                        text: 'Vui lòng điền đầy đủ thông tin',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                
+                try {
+                    // Show loading
+                    Swal.fire({
+                        title: 'Đang đăng nhập...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Login user
+                    const result = await window.AuthService.login(email, password);
+                    
+                    if (result.success) {
+                        // Show success message
+                        Swal.fire({
+                            title: 'Đăng nhập thành công!',
+                            text: 'Chào mừng bạn quay trở lại',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Redirect based on role
+                            const role = result.user.role;
+                            console.log('User role:', role);
+                            
+                            if (role === 'admin') {
+                                // Chuyển hướng đến trang dashboard cho admin
+                                console.log('Redirecting admin to dashboard');
+                                window.location.href = 'admin/manage-dashboard.html';
+                            } else {
+                                // Chuyển hướng đến trang chủ cho user thường
+                                console.log('Redirecting user to home');
+                                window.location.href = 'index.html';
+                            }
+                        });
+                    } else {
+                        throw new Error(result.message || 'Đăng nhập thất bại');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    Swal.fire({
+                        title: 'Đăng nhập thất bại',
+                        text: error.message || 'Email hoặc mật khẩu không đúng',
+                        icon: 'error',
+                        confirmButtonText: 'Thử lại'
+                    });
+                }
+            });
+            
+            // Handle forgot password
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                Swal.fire({
+                    title: 'Quên mật khẩu',
+                    input: 'email',
+                    inputLabel: 'Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu',
+                    inputPlaceholder: 'Nhập email của bạn',
+                    showCancelButton: true,
+                    confirmButtonText: 'Gửi',
+                    cancelButtonText: 'Hủy',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (email) => {
+                        if (!email) {
+                            Swal.showValidationMessage('Vui lòng nhập email');
+                            return false;
+                        }
+                        
+                        // Mock API call to send reset password email
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve(email);
+                            }, 1000);
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Đã gửi email',
+                            text: `Hướng dẫn đặt lại mật khẩu đã được gửi đến ${result.value}`,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

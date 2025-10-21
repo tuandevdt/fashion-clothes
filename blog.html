@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Fashion House</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        /* Blog Banner - thiết kế nhẹ nhàng giống trang liên hệ */
+        .blog-banner {
+            position: relative;
+            height: 300px;
+            background-image: url('assets/image/banner1.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .blog-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .blog-banner-content {
+            position: relative;
+            color: white;
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .blog-banner-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .blog-banner-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+            opacity: 0.95;
+        }
+        
+        /* Search Container - giống với search form chung */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+        
+        .search-input {
+            border-radius: 20px;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.2);
+        }
+        
+        .clear-search-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+        
+        .clear-search-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Blog Cards - giống với product cards */
+        .blog-card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .blog-card img {
+            border-radius: 10px 10px 0 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .blog-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .blog-meta i {
+            color: var(--primary-color);
+        }
+        
+        /* Alert styles */
+        .alert-info {
+            background-color: #f8f9fa;
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+        }
+        
+        .badge {
+            background-color: var(--primary-color) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Banner -->
+        <div class="blog-banner">
+            <div class="blog-banner-content">
+                <h1 class="blog-banner-title">Blog Fashion House</h1>
+                <p class="blog-banner-subtitle">Cap nhat xu huong thoi trang moi nhat</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Search Section -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="search-container">
+                        <form onsubmit="searchBlogs(event)">
+                            <div class="position-relative">
+                                <input type="text" class="form-control search-input" id="search-input" 
+                                       placeholder="Nhap tu khoa de tim kiem bai viet..." 
+                                       oninput="handleSearchInput()">
+                                <button type="button" class="clear-search-btn" id="clear-search-btn" 
+                                        onclick="clearSearch()" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Results Info -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div id="search-info" style="display: none;"></div>
+                    <div id="clear-search-container" style="display: none;">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="clearSearch()">
+                            <i class="fas fa-times me-1"></i> Xoa bo loc
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Posts -->
+            <div class="row" id="blog-posts-container">
+                <!-- Blog posts will be loaded here via JavaScript -->
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Dang tai bai viet...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Mock Data Service -->
+    <script src="assets/data/mock-data-service.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load header and footer
+            await loadHeaderAndFooter();
+
+            // Wait for scripts to load, then load blog posts
+            setTimeout(() => {
+                loadBlogPosts();
+            }, 500);
+        });
+
+        // Helper: Normalize image URL
+        function getImageUrl(url) {
+            if (!url) return 'assets/image/default-image.avif';
+            if (url.startsWith('http')) return url;
+            return url.startsWith('/') ? url.substring(1) : url;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('vi-VN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }).format(date);
+        }
+
+        // Load blog posts
+        async function loadBlogPosts(keyword = '') {
+            try {
+                const blogPostsContainer = document.getElementById('blog-posts-container');
+                const searchInfo = document.getElementById('search-info');
+                const clearSearchContainer = document.getElementById('clear-search-container');
+                const clearSearchBtn = document.getElementById('clear-search-btn');
+
+                blogPostsContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Dang tai bai viet...</p>
+                    </div>
+                `;
+
+                // Su dung apiService giong het nhu index.js
+                const response = await apiService.getBlogs({ limit: 20, page: 0 });
+                let blogs = response.content || [];
+                
+                // Neu co keyword, loc theo keyword
+                if (keyword && keyword.trim()) {
+                    blogs = blogs.filter(blog => 
+                        blog.title.toLowerCase().includes(keyword.toLowerCase()) ||
+                        (blog.excerpt && blog.excerpt.toLowerCase().includes(keyword.toLowerCase()))
+                    );
+                }
+
+                // Show/hide search UI elements
+                if (keyword && keyword.trim()) {
+                    clearSearchContainer.style.display = 'block';
+                    clearSearchBtn.style.display = 'block';
+                    searchInfo.style.display = 'block';
+                    searchInfo.innerHTML = `
+                        <div class="alert alert-info mb-3">
+                            <i class="fas fa-search me-2"></i>
+                            Ket qua tim kiem cho: "<strong>${keyword}</strong>"
+                            <span class="badge bg-primary ms-2">${blogs.length} bai viet</span>
+                        </div>
+                    `;
+                } else {
+                    clearSearchContainer.style.display = 'none';
+                    clearSearchBtn.style.display = 'none';
+                    searchInfo.style.display = 'none';
+                }
+
+                // Clear container
+                blogPostsContainer.innerHTML = '';
+
+                if (blogs.length === 0) {
+                    const message = keyword ? 'Khong tim thay bai viet nao phu hop' : 'Khong co bai viet nao';
+                    blogPostsContainer.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">${message}</h5>
+                            <p class="text-muted">Thu tim kiem voi tu khoa khac</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display blog posts
+                blogs.forEach(blog => {
+                    const blogCard = document.createElement('div');
+                    blogCard.className = 'col-md-4 mb-4';
+
+                    const imageUrl = getImageUrl(blog.image);
+                    const formattedDate = formatDate(blog.createDate);
+
+                    blogCard.innerHTML = `
+                        <div class="card h-100 blog-card">
+                            <img src="${imageUrl}" alt="${blog.title}" class="card-img-top" style="height: 200px; object-fit: cover;"
+                                 onerror="this.src='assets/image/default-image.avif'">
+                            <div class="card-body d-flex flex-column">
+                                <div class="blog-meta mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar-alt me-1"></i>${formattedDate}
+                                        <span class="mx-2">|</span>
+                                        <i class="fas fa-tag me-1"></i>${blog.category || 'Thoi trang'}
+                                    </small>
+                                </div>
+                                <h5 class="card-title">
+                                    <a href="blog-detail.html?id=${blog.id}" class="text-decoration-none text-dark">${blog.title}</a>
+                                </h5>
+                                <p class="card-text flex-grow-1">${blog.excerpt || 'Noi dung hay ve thoi trang va phong cach song...'}</p>
+                                <div class="blog-stats mb-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-eye me-1"></i>${blog.views || 0} luot xem
+                                        <span class="mx-2">|</span>
+                                        <i class="fas fa-comment me-1"></i>${blog.comments || 0} binh luan
+                                    </small>
+                                </div>
+                                <div class="mt-auto">
+                                    <a href="blog-detail.html?id=${blog.id}" class="btn btn-outline-primary">Doc them</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    blogPostsContainer.appendChild(blogCard);
+                });
+
+            } catch (error) {
+                document.getElementById('blog-posts-container').innerHTML = `
+                    <div class="col-12 text-center py-5 text-danger">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <h5>Khong the tai bai viet</h5>
+                        <p>Vui long thu lai sau</p>
+                        <button class="btn btn-primary" onclick="loadBlogPosts()">Thu lai</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Search timeout for debouncing
+        let searchTimeout;
+
+        // Handle search input with debouncing
+        function handleSearchInput() {
+            clearTimeout(searchTimeout);
+            const keyword = document.getElementById('search-input').value;
+            
+            // Show/hide clear button
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (keyword.trim()) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+            
+            searchTimeout = setTimeout(() => {
+                loadBlogPosts(keyword);
+            }, 500); // Wait 500ms after user stops typing
+        }
+
+        // Search blogs
+        function searchBlogs(event) {
+            event.preventDefault();
+            const keyword = document.getElementById('search-input').value;
+            loadBlogPosts(keyword);
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('clear-search-btn').style.display = 'none';
+            document.getElementById('clear-search-container').style.display = 'none';
+            document.getElementById('search-info').style.display = 'none';
+            loadBlogPosts();
+        }
+    </script>
+</body>
+</html>

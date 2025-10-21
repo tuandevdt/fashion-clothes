@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý danh mục - Tina Shop Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <!-- Common CSS -->
+  <link rel="stylesheet" href="assets/css/admin-common.css">
+  <!-- Layout CSS -->
+  <link rel="stylesheet" href="assets/css/admin-header.css">
+  <link rel="stylesheet" href="assets/css/admin-sidebar.css">
+  <link rel="stylesheet" href="assets/css/admin-footer.css">
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="assets/css/manage-categories.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Quản lý danh mục</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary me-2" id="btnAddCategory">
+              <i class="bi bi-plus-circle"></i> Thêm danh mục
+            </button>
+          </div>
+        </div>
+
+        <!-- Bộ lọc -->
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <!-- Bỏ bộ lọc danh mục cha và trạng thái -->
+                  </div>
+                  <div class="col-md-4">
+                    <label for="searchCategory" class="form-label">Tìm kiếm</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="searchCategory" placeholder="Tên danh mục...">
+                      <button class="btn btn-outline-secondary" type="button" id="btnSearch">
+                        <i class="bi bi-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danh sách danh mục -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th width="50">#</th>
+                        <th width="80">Hình ảnh</th>
+                        <th>Tên danh mục</th>
+                        <th>Mô tả</th>
+                        <th width="150">Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody id="categoryTable">
+                      <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Phân trang -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div>
+                    <span id="totalCategories">0</span> danh mục
+                  </div>
+                  <div id="pagination" class="pagination-container">
+                    <!-- Phân trang sẽ được thêm bằng JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Modal thêm/sửa danh mục -->
+  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="categoryModalLabel">Thêm danh mục mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="categoryForm">
+            <input type="hidden" id="categoryId">
+
+            <div class="mb-3">
+              <label for="categoryName" class="form-label required">Tên danh mục</label>
+              <input type="text" class="form-control" id="categoryName" required>
+            </div>
+
+            <!-- Đã bỏ trường slug và danh mục cha -->
+
+            <div class="mb-3">
+              <label for="categoryDescription" class="form-label">Mô tả</label>
+              <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="categoryImage" class="form-label">Hình ảnh</label>
+              <input type="file" class="form-control" id="categoryImage" accept="image/*">
+              <div id="imagePreview" class="mt-2"></div>
+            </div>
+
+            <!-- Đã bỏ trường trạng thái -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-primary" id="btnSaveCategory">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+  <!-- Common JS -->
+  <script src="assets/js/admin-common.js"></script>
+  <!-- Layout JS -->
+  <script src="assets/js/admin-header.js"></script>
+  <script src="assets/js/admin-sidebar.js"></script>
+  <!-- Mock Data -->
+  <script src="../assets/data/mock-data-service.js"></script>
+  <script src="../assets/data/admin-data.js"></script>
+  <!-- Page JS -->
+  <script src="assets/js/manage-categories.js"></script>
+</body>
+</html>
+
+
+
+
+

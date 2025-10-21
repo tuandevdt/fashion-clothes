@@ -1,0 +1,110 @@
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Tina Shop</h5>
+                    <p>Chuyên cung cấp các sản phẩm thời trang nữ cao cấp với chất lượng tốt nhất, giá cả hợp lý.</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Liên kết nhanh</h5>
+                    <ul class="footer-links">
+                        <li><a href="#" id="footer-home">Trang chủ</a></li>
+                        <li><a href="#" id="footer-products">Sản phẩm</a></li>
+                        <li><a href="#" id="footer-blog">Blog</a></li>
+                        <li><a href="#" id="footer-about">Giới thiệu</a></li>
+                        <li><a href="#" id="footer-contact">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Danh mục sản phẩm</h5>
+                    <ul class="footer-links">
+                        <li><a href="#" id="footer-category-bags">Túi xách</a></li>
+                        <li><a href="#" id="footer-category-wallets">Ví</a></li>
+                        <li><a href="#" id="footer-category-accessories">Phụ kiện</a></li>
+                        <li><a href="#" id="footer-category-travel">Túi du lịch</a></li>
+                        <li><a href="#" id="footer-category-laptop">Túi laptop</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Liên hệ với chúng tôi</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Đường Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</li>
+                        <li><i class="fas fa-phone-alt me-2"></i> (028) 3822 9999</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@tinashop.com</li>
+                    </ul>
+                    <div class="mt-3">
+                        <h6>Đăng ký nhận tin</h6>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Email của bạn">
+                            <button class="btn btn-primary" type="button">Đăng ký</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row footer-bottom">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2023 Tina Shop. Tất cả quyền được bảo lưu.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR-1024x800.png" alt="VNPAY" height="30" class="ms-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" height="30" class="ms-2">
+                    <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-Visa-Blue-and-Gold.png" alt="Visa" height="30" class="ms-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" height="30" class="ms-2">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+<script>
+// Setup footer links with correct paths
+function setupFooterLinks() {
+    // Determine the correct path based on current location
+    // All files are now in root directory
+    const basePath = '';
+
+    // Setup footer navigation links
+    const footerHome = document.getElementById('footer-home');
+    const footerProducts = document.getElementById('footer-products');
+    const footerBlog = document.getElementById('footer-blog');
+    const footerAbout = document.getElementById('footer-about');
+    const footerContact = document.getElementById('footer-contact');
+
+    if (footerHome) footerHome.href = basePath + 'index.html';
+    if (footerProducts) footerProducts.href = basePath + 'products.html';
+    if (footerBlog) footerBlog.href = basePath + 'blog.html';
+    if (footerAbout) footerAbout.href = basePath + 'about.html';
+    if (footerContact) footerContact.href = basePath + 'contact.html';
+
+    // Setup category links (pointing to products page with category filter)
+    const categoryBags = document.getElementById('footer-category-bags');
+    const categoryWallets = document.getElementById('footer-category-wallets');
+    const categoryAccessories = document.getElementById('footer-category-accessories');
+    const categoryTravel = document.getElementById('footer-category-travel');
+    const categoryLaptop = document.getElementById('footer-category-laptop');
+
+    if (categoryBags) categoryBags.href = basePath + 'products.html?categoryId=1';
+    if (categoryWallets) categoryWallets.href = basePath + 'products.html?categoryId=2';
+    if (categoryAccessories) categoryAccessories.href = basePath + 'products.html?categoryId=3';
+    if (categoryTravel) categoryTravel.href = basePath + 'products.html?categoryId=4';
+    if (categoryLaptop) categoryLaptop.href = basePath + 'products.html?categoryId=5';
+}
+
+// Call setup when footer is loaded
+setupFooterLinks();
+
+// Make function globally available
+window.setupFooterLinks = setupFooterLinks;
+</script>

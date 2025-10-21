@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        .about-banner {
+            position: relative;
+            height: 400px;
+            background-image: url('assets/image/about-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .about-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .about-banner-content {
+            position: relative;
+            color: white;
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .about-banner-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .about-banner-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        
+        .about-section {
+            margin-bottom: 80px;
+        }
+        
+        .about-section-title {
+            position: relative;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+        
+        .about-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .about-content {
+            line-height: 1.8;
+        }
+        
+        .about-content p {
+            margin-bottom: 20px;
+        }
+        
+        .mission-vision-card {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .mission-vision-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mission-vision-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .mission-vision-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .mission-vision-content {
+            color: #6c757d;
+        }
+        
+        .team-member-card {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .team-member-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 5px solid #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        
+        .team-member-card:hover .team-member-image {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+        
+        .team-member-name {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .team-member-position {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .team-member-social {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .team-member-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .team-member-social a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .testimonial-card {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: '\f10d';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #6c757d;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .testimonial-author-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .testimonial-author-title {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+        
+        .counter-item {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .counter-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .counter-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .counter-title {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Banner -->
+        <div class="about-banner">
+            <div class="about-banner-content">
+                <h1 class="about-banner-title">Giới thiệu về Tina Shop</h1>
+                <p class="about-banner-subtitle">Chúng tôi tự hào mang đến những sản phẩm thời trang nữ cao cấp với chất lượng tốt nhất</p>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- About Us Section -->
+            <section class="about-section">
+                <h2 class="about-section-title">Câu chuyện của chúng tôi</h2>
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="about-image">
+                            <img src="assets/image/about-story.jpg" alt="Câu chuyện Tina Shop">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about-content">
+                            <p>Tina Shop được thành lập vào năm 2015 bởi Nguyễn Thị Tina - một người phụ nữ đam mê thời trang và luôn mong muốn mang đến những sản phẩm chất lượng cao cho phụ nữ Việt Nam.</p>
+                            <p>Xuất phát từ niềm đam mê với túi xách và phụ kiện thời trang, Tina đã quyết định mở một cửa hàng nhỏ tại Thành phố Hồ Chí Minh. Với sự tận tâm và khát khao không ngừng, Tina Shop đã dần phát triển và trở thành một trong những thương hiệu thời trang nữ được yêu thích nhất hiện nay.</p>
+                            <p>Chúng tôi tự hào mang đến cho khách hàng những sản phẩm chất lượng cao, thiết kế độc đáo và giá cả hợp lý. Mỗi sản phẩm tại Tina Shop đều được lựa chọn kỹ lưỡng, đảm bảo đáp ứng nhu cầu và thị hiếu của phụ nữ hiện đại.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Mission & Vision Section -->
+            <section class="about-section">
+                <h2 class="about-section-title">Sứ mệnh & Tầm nhìn</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="mission-vision-card">
+                            <div class="mission-vision-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h3 class="mission-vision-title">Sứ mệnh</h3>
+                            <div class="mission-vision-content">
+                                <p>Sứ mệnh của Tina Shop là mang đến cho phụ nữ Việt Nam những sản phẩm thời trang chất lượng cao, giúp họ tự tin thể hiện phong cách cá nhân và nâng cao giá trị bản thân.</p>
+                                <p>Chúng tôi cam kết không ngừng đổi mới, sáng tạo để đáp ứng nhu cầu ngày càng cao của khách hàng, đồng thời xây dựng một môi trường làm việc chuyên nghiệp và thân thiện cho nhân viên.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="mission-vision-card">
+                            <div class="mission-vision-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3 class="mission-vision-title">Tầm nhìn</h3>
+                            <div class="mission-vision-content">
+                                <p>Tina Shop hướng đến việc trở thành thương hiệu thời trang nữ hàng đầu tại Việt Nam, được khách hàng tin tưởng và yêu thích.</p>
+                                <p>Chúng tôi không chỉ cung cấp sản phẩm mà còn mang đến trải nghiệm mua sắm tuyệt vời, tạo dựng phong cách sống thời thượng và đẳng cấp cho phụ nữ hiện đại.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Our Team Section -->
+            <section class="about-section">
+                <h2 class="about-section-title">Đội ngũ của chúng tôi</h2>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="team-member-card">
+                            <img src="assets/image/team-member1.jpg" alt="Nguyễn Thị Tina" class="team-member-image">
+                            <h4 class="team-member-name">Nguyễn Thị Tina</h4>
+                            <div class="team-member-position">Nhà sáng lập & CEO</div>
+                            <div class="team-member-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="team-member-card">
+                            <img src="assets/image/team-member2.jpg" alt="Trần Văn Nam" class="team-member-image">
+                            <h4 class="team-member-name">Trần Văn Nam</h4>
+                            <div class="team-member-position">Giám đốc Marketing</div>
+                            <div class="team-member-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="team-member-card">
+                            <img src="assets/image/team-member3.jpg" alt="Lê Thị Hương" class="team-member-image">
+                            <h4 class="team-member-name">Lê Thị Hương</h4>
+                            <div class="team-member-position">Giám đốc Sản phẩm</div>
+                            <div class="team-member-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="team-member-card">
+                            <img src="assets/image/team-member4.jpg" alt="Phạm Minh Tuấn" class="team-member-image">
+                            <h4 class="team-member-name">Phạm Minh Tuấn</h4>
+                            <div class="team-member-position">Giám đốc Tài chính</div>
+                            <div class="team-member-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Testimonials Section -->
+            <section class="about-section">
+                <h2 class="about-section-title">Khách hàng nói gì về chúng tôi</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>Tôi rất hài lòng với chất lượng sản phẩm của Tina Shop. Chiếc túi xách tôi mua đã sử dụng được hơn 2 năm mà vẫn như mới. Nhân viên tư vấn rất nhiệt tình và chuyên nghiệp.</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="assets/image/testimonial1.jpg" alt="Nguyễn Thị Mai" class="testimonial-author-image">
+                                <div>
+                                    <div class="testimonial-author-name">Nguyễn Thị Mai</div>
+                                    <div class="testimonial-author-title">Khách hàng thân thiết</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>Tina Shop là địa chỉ tin cậy mỗi khi tôi cần mua túi xách hoặc phụ kiện. Sản phẩm đa dạng, thiết kế đẹp và hợp thời trang. Đặc biệt, dịch vụ chăm sóc khách hàng rất tốt.</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="assets/image/testimonial2.jpg" alt="Trần Thị Hoa" class="testimonial-author-image">
+                                <div>
+                                    <div class="testimonial-author-name">Trần Thị Hoa</div>
+                                    <div class="testimonial-author-title">Khách hàng VIP</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Counter Section -->
+            <section class="about-section">
+                <div class="row">
+                    <div class="col-md-3 col-6">
+                        <div class="counter-item">
+                            <div class="counter-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="counter-number">10,000+</div>
+                            <div class="counter-title">Khách hàng hài lòng</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="counter-item">
+                            <div class="counter-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="counter-number">500+</div>
+                            <div class="counter-title">Sản phẩm</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="counter-item">
+                            <div class="counter-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="counter-number">5</div>
+                            <div class="counter-title">Chi nhánh</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="counter-item">
+                            <div class="counter-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div class="counter-number">8</div>
+                            <div class="counter-title">Năm kinh nghiệm</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeaderAndFooter();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+

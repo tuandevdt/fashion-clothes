@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div class="auth-container">
+            <h2 class="text-center mb-4">Đăng ký tài khoản</h2>
+            
+            <form id="registerForm">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Họ và tên *</label>
+                    <input type="text" class="form-control" id="fullName" placeholder="Nhập họ và tên" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="email" placeholder="Nhập email" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Số điện thoại *</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ (không bắt buộc)">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu *</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-text">Mật khẩu phải có ít nhất 6 ký tự</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Xác nhận mật khẩu *</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                    <label class="form-check-label" for="agreeTerms">
+                        Tôi đồng ý với <a href="#" class="text-decoration-none">Điều khoản sử dụng</a> và <a href="#" class="text-decoration-none">Chính sách bảo mật</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-user-plus me-2"></i>Đăng ký
+                </button>
+            </form>
+            
+            <hr class="my-4">
+            
+            <div class="text-center">
+                <p>Đã có tài khoản? <a href="login.html" class="text-decoration-none fw-bold">Đăng nhập ngay</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Mock Data Service -->
+    <script src="assets/data/mock-data-service.js"></script>
+    <!-- Auth Service -->
+    <script src="assets/js/services/auth-service.js"></script>
+    <!-- Common JS -->
+    <script src="assets/js/common.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeaderAndFooter();
+            
+            const registerForm = document.getElementById('registerForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                const icon = togglePassword.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+            
+            // Toggle confirm password visibility
+            toggleConfirmPassword.addEventListener('click', function() {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                
+                const icon = toggleConfirmPassword.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+            
+            // Handle register form submission
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const fullName = document.getElementById('fullName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const address = document.getElementById('address').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const agreeTerms = document.getElementById('agreeTerms').checked;
+                
+                // Validate form data
+                if (!fullName || !email || !phone || !password || !confirmPassword) {
+                    Swal.fire({
+                        title: 'Lỗi',
+                        text: 'Vui lòng điền đầy đủ các trường bắt buộc',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                
+                // Check terms agreement
+                if (!agreeTerms) {
+                    Swal.fire({
+                        title: 'Cần đồng ý điều khoản',
+                        text: 'Vui lòng đồng ý với Điều khoản sử dụng và Chính sách bảo mật',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                
+                // Validate email
+                if (!window.AuthService.validateEmail(email)) {
+                    Swal.fire({
+                        title: 'Email không hợp lệ',
+                        text: 'Vui lòng nhập địa chỉ email đúng định dạng',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                
+                // Validate password
+                const passwordValidation = window.AuthService.validatePassword(password);
+                if (!passwordValidation.valid) {
+                    Swal.fire({
+                        title: 'Mật khẩu không hợp lệ',
+                        text: passwordValidation.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                
+                // Check password confirmation
+                if (password !== confirmPassword) {
+                    Swal.fire({
+                        title: 'Mật khẩu không khớp',
+                        text: 'Mật khẩu xác nhận không trùng khớp',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                
+                try {
+                    // Prepare user data
+                    const userData = {
+                        fullName: fullName,
+                        email: email,
+                        phone: phone,
+                        address: address,
+                        password: password
+                    };
+                    
+                    // Show loading
+                    Swal.fire({
+                        title: 'Đang đăng ký...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Check if AuthService is available
+                    if (!window.AuthService) {
+                        throw new Error('AuthService không được tải');
+                    }
+                    
+                    const result = await window.AuthService.register(userData);
+                    
+                    if (result.success) {
+                        Swal.fire({
+                            title: 'Đăng ký thành công!',
+                            text: 'Bạn đã được tự động đăng nhập',
+                            icon: 'success',
+                            confirmButtonText: 'Tiếp tục'
+                        }).then(() => {
+                            window.location.href = 'index.html';
+                        });
+                    } else {
+                        throw new Error(result.message || 'Đăng ký thất bại');
+                    }
+                } catch (error) {
+                    console.error('Register error:', error);
+                    Swal.fire({
+                        title: 'Đăng ký thất bại',
+                        text: error.message || 'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.',
+                        icon: 'error',
+                        confirmButtonText: 'Thử lại'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

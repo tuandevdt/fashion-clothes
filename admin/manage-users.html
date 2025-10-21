@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý người dùng - Tina Shop Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <!-- Common CSS -->
+  <link rel="stylesheet" href="assets/css/admin-common.css">
+  <!-- Layout CSS -->
+  <link rel="stylesheet" href="assets/css/admin-header.css">
+  <link rel="stylesheet" href="assets/css/admin-sidebar.css">
+  <link rel="stylesheet" href="assets/css/admin-footer.css">
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="assets/css/manage-users.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+      
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Quản lý người dùng</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary me-2" id="btnAddUser">
+              <i class="bi bi-plus-circle"></i> Thêm người dùng
+            </button>
+          </div>
+        </div>
+        
+        <!-- Bộ lọc -->
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label for="filterRole" class="form-label">Vai trò</label>
+                    <select class="form-select" id="filterRole">
+                      <option value="">Tất cả vai trò</option>
+                      <option value="ADMIN">Admin</option>
+                      <option value="CUSTOMER">Khách hàng</option>
+                    </select>
+                  </div>
+                  <div class="col-md-8">
+                    <label for="searchUser" class="form-label">Tìm kiếm</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="searchUser" placeholder="Tên đăng nhập, email, họ tên...">
+                      <button class="btn btn-outline-secondary" type="button" id="btnSearch">
+                        <i class="bi bi-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Danh sách người dùng -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th width="50">#</th>
+                        <th width="80">Ảnh</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tạo</th>
+                        <th width="180">Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userTable">
+                      <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                      <tr>
+                        <td colspan="9" class="text-center">Đang tải dữ liệu...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Phân trang -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div>
+                    <span id="totalUsers">0</span> người dùng
+                  </div>
+                  <div id="pagination" class="pagination-container">
+                    <!-- Phân trang sẽ được thêm bằng JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+  <!-- Common JS --><script src="assets/js/admin-common.js"></script>
+  <!-- Layout JS -->
+  <script src="assets/js/admin-header.js"></script>
+  <script src="assets/js/admin-sidebar.js"></script>
+  <!-- Mock Data -->
+  <script src="../assets/data/mock-data-service.js"></script>
+  <script src="../assets/data/admin-data.js"></script>
+  <!-- Page JS -->
+  <script src="assets/js/manage-users.js"></script>
+  
+  <!-- Modal thêm người dùng -->
+  <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="userModalLabel">
+            <i class="bi bi-person-plus me-2"></i>Thêm người dùng mới
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+          <form id="userForm">
+            <input type="hidden" id="userId" value="">
+
+            <!-- Thông tin đăng nhập -->
+            <div class="card mb-4">
+              <div class="card-header bg-light">
+                <h6 class="mb-0">
+                  <i class="bi bi-key me-2"></i>Thông tin đăng nhập
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="username" class="form-label fw-bold">
+                        <i class="bi bi-person me-1"></i>Tên đăng nhập
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" class="form-control" id="username" required
+                             placeholder="Nhập tên đăng nhập...">
+                      <div class="form-text">Tên đăng nhập phải là duy nhất</div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="password" class="form-label fw-bold">
+                        <i class="bi bi-lock me-1"></i>Mật khẩu
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="password" class="form-control" id="password" required
+                             placeholder="Nhập mật khẩu...">
+                      <div class="form-text">Mật khẩu tối thiểu 6 ký tự</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thông tin cá nhân -->
+            <div class="card mb-4">
+              <div class="card-header bg-success text-white">
+                <h6 class="mb-0">
+                  <i class="bi bi-person-badge me-2"></i>Thông tin cá nhân
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="fullname" class="form-label fw-bold">
+                        <i class="bi bi-person-lines-fill me-1"></i>Họ và tên
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" class="form-control" id="fullname" required
+                             placeholder="Nhập họ và tên đầy đủ...">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="email" class="form-label fw-bold">
+                        <i class="bi bi-envelope me-1"></i>Email
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="email" class="form-control" id="email" required
+                             placeholder="Nhập địa chỉ email...">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="phone" class="form-label fw-bold">
+                        <i class="bi bi-telephone me-1"></i>Số điện thoại
+                      </label>
+                      <input type="text" class="form-control" id="phone"
+                             placeholder="Nhập số điện thoại...">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="gender" class="form-label fw-bold">
+                        <i class="bi bi-gender-ambiguous me-1"></i>Giới tính
+                      </label>
+                      <select class="form-select" id="gender">
+                        <option value="">Chọn giới tính</option>
+                        <option value="MALE">Nam</option>
+                        <option value="FEMALE">Nữ</option>
+                        <option value="OTHER">Khác</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="address" class="form-label fw-bold">
+                        <i class="bi bi-geo-alt me-1"></i>Địa chỉ
+                      </label>
+                      <textarea class="form-control" id="address" rows="2"
+                                placeholder="Nhập địa chỉ chi tiết..."></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ảnh đại diện và vai trò -->
+            <div class="card mb-4">
+              <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">
+                  <i class="bi bi-image me-2"></i>Ảnh đại diện & Vai trò
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="avatar" class="form-label fw-bold">
+                        <i class="bi bi-camera me-1"></i>Ảnh đại diện
+                      </label>
+                      <input type="file" class="form-control" id="avatar" accept="image/*">
+                      <div class="form-text">Chọn ảnh đại diện (JPG, PNG, WEBP)</div>
+                      <div id="avatarPreview" class="mt-3 text-center"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="roleName" class="form-label fw-bold">
+                        <i class="bi bi-shield-check me-1"></i>Vai trò
+                        <span class="text-danger">*</span>
+                      </label>
+                      <select class="form-select" id="roleName" required>
+                        <option value="">Chọn vai trò</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="CUSTOMER">Khách hàng</option>
+                      </select>
+                      <div class="form-text">Chọn vai trò phù hợp cho người dùng</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i>Hủy bỏ
+          </button>
+          <button type="button" class="btn btn-primary" id="btnSaveUser">
+            <i class="bi bi-check-circle me-1"></i>Lưu người dùng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+
+

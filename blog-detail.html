@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài viết - Tina Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <style>
+        /* Blog Detail Container - phù hợp với container chung */
+        .blog-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Breadcrumb styling */
+        .breadcrumb {
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            padding: 10px 15px;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--primary-color);
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-color);
+        }
+        
+        /* Blog Header */
+        .blog-header {
+            margin-bottom: 2rem;
+        }
+        
+        .blog-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-weight: 700;
+            line-height: 1.3;
+            max-height: 4em; /* Giới hạn chiều cao tương đương 4 dòng */
+            overflow-y: auto; /* Thêm scroll khi tiêu đề quá dài */
+            padding-right: 10px; /* Thêm padding để tránh scrollbar che chữ */
+        }
+        
+        /* Custom scrollbar cho tiêu đề */
+        .blog-title::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .blog-title::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .blog-title::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .blog-title::-webkit-scrollbar-thumb:hover {
+            background: #e55a5a;
+        }
+        
+        .blog-meta {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .blog-meta-item {
+            margin-right: 25px;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .blog-meta-item i {
+            color: var(--primary-color);
+            margin-right: 8px;
+            width: 16px;
+        }
+        
+        .blog-featured-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Blog Content */
+        .blog-content {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-text {
+            background: white;
+            padding: 0;
+        }
+        
+        .blog-excerpt {
+            font-size: 1.1rem;
+            color: #555;
+            font-style: italic;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 0 0 2rem 0;
+        }
+        
+        .blog-main-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .blog-main-content h5, .blog-main-content h6 {
+            color: var(--text-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .blog-main-content h5 {
+            font-size: 1.3rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        .blog-main-content ul {
+            margin: 1rem 0;
+            padding-left: 0;
+        }
+        
+        .blog-main-content li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+            list-style: none;
+        }
+        
+        .blog-main-content li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            padding-left: 2rem;
+        }
+        
+        .sidebar .card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .sidebar .card-title {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        /* Related Posts */
+        .sidebar a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar a:hover {
+            color: var(--primary-color);
+        }
+        
+        .sidebar a:hover .text-dark {
+            color: var(--primary-color) !important;
+        }
+        
+        .sidebar img {
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar a:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Tags */
+        .badge {
+            background-color: var(--light-gray) !important;
+            color: var(--text-color) !important;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .badge:hover {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Alert styling */
+        .alert-danger {
+            border-radius: 10px;
+            border: none;
+            background-color: #f8f9fa;
+            border-left: 4px solid #dc3545;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-title {
+                font-size: 2rem;
+            }
+            
+            .sidebar {
+                padding-left: 0;
+                margin-top: 2rem;
+            }
+            
+            .blog-meta {
+                padding: 10px;
+            }
+            
+            .blog-meta-item {
+                margin-right: 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div id="blog-detail-container">
+            <!-- Blog detail will be loaded here via JavaScript -->
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Đang tải bài viết...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Mock Data Service -->
+    <script src="assets/data/mock-data-service.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/common.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load header and footer first
+            loadHeaderAndFooter();
+            
+            // Get blog post ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            
+            if (!postId) {
+                // Redirect to blog page if no ID provided
+                window.location.href = 'blog.html';
+                return;
+            }
+            
+            // Load blog post details immediately
+            loadBlogPostDetails(postId);
+        });
+        
+        // Load blog post details
+        async function loadBlogPostDetails(postId) {
+            const blogDetailContainer = document.getElementById('blog-detail-container');
+            try {
+                // Su dung apiService giong nhu index.js
+                const blogPost = await apiService.getBlogById(postId);
+                
+                if (!blogPost) {
+                    throw new Error('Khong tim thay bai viet voi ID: ' + postId);
+                }
+                
+                // Generate blog detail HTML
+                const blogDetailHTML = `
+                    <div class="blog-detail-container">
+                        <nav aria-label="breadcrumb" class="mb-4">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Trang chu</a></li>
+                                <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                                <li class="breadcrumb-item active">${blogPost.title}</li>
+                            </ol>
+                        </nav>
+                        
+                        <div class="blog-header">
+                            <h1 class="blog-title">${blogPost.title}</h1>
+                            <div class="blog-meta">
+                                <div class="blog-meta-item">
+                                    <i class="fas fa-calendar-alt"></i> ${formatDate(blogPost.createDate)}
+                                </div>
+                                <div class="blog-meta-item">
+                                    <i class="fas fa-user"></i> ${blogPost.author || 'Admin'}
+                                </div>
+                                <div class="blog-meta-item">
+                                    <i class="fas fa-tag"></i> ${blogPost.category || 'Thoi trang'}
+                                </div>
+                                <div class="blog-meta-item">
+                                    <i class="fas fa-eye"></i> ${blogPost.views || 0} luot xem
+                                </div>
+                            </div>
+                            <img src="${normalizeImageUrl(blogPost.image)}" alt="${blogPost.title}" class="blog-featured-image">
+                        </div>
+                        <div class="blog-content">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="blog-text">
+                                        <div class="blog-excerpt mb-4">
+                                            <p class="lead">${blogPost.excerpt || ''}</p>
+                                        </div>
+                                        
+                                        <div class="blog-main-content">
+                                            ${blogPost.content || `
+                                                <p>Day la mot bai viet hay ve thoi trang va phong cach song. Chung toi chia se nhung kinh nghiem va bi quyet giup ban tao dung phong cach rieng, tu tin va noi bat trong moi hoang canh.</p>
+                                                
+                                                <h5>Xu huong thoi trang hien dai</h5>
+                                                <p>Thoi trang hien dai khong chi la viec mac dep ma con la cach the hien ban than qua trang phuc. Moi set do la mot cau chuyen rieng, mang dam tinh cach va phong cach cua nguoi mac.</p>
+                                                
+                                                <h6 class="mt-4">Cac diem noi bat:</h6>
+                                                <ul>
+                                                    <li>Phong cach thoi trang hien dai va sang trong</li>
+                                                    <li>Chat luong san pham cao cap, ben dep</li>
+                                                    <li>Gia ca hop ly, phu hop moi doi tuong khach hang</li>
+                                                    <li>Dich vu cham soc khach hang tan tinh, chu dao</li>
+                                                    <li>Giao hang nhanh chong toan quoc</li>
+                                                </ul>
+                                                
+                                                <p class="mt-3">Cam on ban da doc bai viet cua chung toi. Neu co bat ky thac mac nao ve san pham hay dich vu, xin lien he voi team ho tro de duoc giai dap nhanh chong nhat!</p>
+                                            `}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="sidebar">
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Bai viet lien quan</h6>
+                                                <div id="related-posts">Dang tai...</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Tags</h6>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    ${(blogPost.tags || ['thoi-trang', 'phong-cach', 'xu-huong']).map(tag => 
+                                                        `<span class="badge bg-secondary">#${tag}</span>`
+                                                    ).join('')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                blogDetailContainer.innerHTML = blogDetailHTML;
+                
+                // Load related posts
+                loadRelatedPosts(postId);
+                
+                document.title = blogPost.title + ' - Fashion House';
+                
+            } catch (error) {
+                blogDetailContainer.innerHTML = `
+                    <div class='alert alert-danger'>
+                        <h5>Khong the tai chi tiet bai viet</h5>
+                        <p>Bai viet khong ton tai hoac da bi xoa. Vui long quay ve trang blog de xem cac bai viet khac.</p>
+                        <a href="blog.html" class="btn btn-primary">Quay ve Blog</a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load related posts
+        async function loadRelatedPosts(currentPostId) {
+            const relatedContainer = document.getElementById('related-posts');
+            try {
+                let relatedPosts = [];
+                if (window.MockDataService) {
+                    const response = await window.MockDataService.getBlogs(0, 10);
+                    relatedPosts = response.content.filter(post => post.id != currentPostId).slice(0, 3);
+                } else if (window.apiService) {
+                    const response = await apiService.getBlogs({ limit: 4, page: 0 });
+                    relatedPosts = response.content.filter(post => post.id != currentPostId).slice(0, 3);
+                }
+                
+                if (relatedPosts.length > 0) {
+                    let html = '';
+                    relatedPosts.forEach(post => {
+                        html += `
+                            <div class="mb-3">
+                                <a href="blog-detail.html?id=${post.id}" class="text-decoration-none">
+                                    <div class="d-flex">
+                                        <img src="${normalizeImageUrl(post.image)}" class="rounded me-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                        <div>
+                                            <h6 class="mb-1 text-dark" style="font-size: 0.9rem; line-height: 1.2;">${post.title}</h6>
+                                            <small class="text-muted">${formatDate(post.createDate)}</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        `;
+                    });
+                    relatedContainer.innerHTML = html;
+                } else {
+                    relatedContainer.innerHTML = '<p class="text-muted small">Khong co bai viet lien quan</p>';
+                }
+            } catch (error) {
+                relatedContainer.innerHTML = '<p class="text-muted small">Loi tai bai viet lien quan</p>';
+            }
+        }
+        
+        // Helper
+        function normalizeImageUrl(url) {
+            if (!url) return 'assets/image/default-image.avif';
+            if (url.startsWith('http')) return url;
+            return url.startsWith('/') ? url.substring(1) : url;
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('vi-VN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }).format(date);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
